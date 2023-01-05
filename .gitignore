@@ -127,3 +127,15 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# active learning benchmark
+*.swp
+*.zip
+active-learning/
+alipy-dev/
+dataset_used_in_ALSurvey/
+libact-dev/
+mlrc21-env/
+alipy-log/
+*.csv
+
