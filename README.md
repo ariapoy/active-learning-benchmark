@@ -26,26 +26,10 @@ Related work: [#SV74 A Comparative Survey: Benchmarking for Pool-based Active Le
 
 ## Quick Start
 
-To run several experiments of the query strategy on the dataset.
+Run an experiment.
 
-1. `bash run.sh`, sequentially run multiple datasets-experiments with specific query strategy, and save results at the end.
-2. `bash run-once.sh` parallel run multiple seeds-experiments with specific query strategy, datasets, and save results at each iteration.
+`python main.py`
 
-After you finish it, you can mv results and *collect.py*, *verify.py* to specific directory.
-
-1. `mkdir ${QS-NAME}; mv *.csv *.txt collect.py verify.py ${QS-NAME}; cd ${QS-NAME}`
-2. `python collect.py`, collect all results from different SERVER.
-3. `python verify.py`, calculate statistics(mean) of AUBC.
-
-## Run on AWS EC2
-
-0. `ssh -i ${KEY-NAME}.pem ubuntu@${IP ADDRESS}`
-1. `sudo apt update; sudo apt install python3.8-venv -y`
-2. `sudo apt-get install build-essential gfortran libatlas-base-dev liblapacke-dev python3-dev -y`
-3. Follow above **Installation**.
-
-After you install the enviornments, you can measure computation resources and running time by:
-
-1. `time bash run-time.sh`
+Reproduce all results. (Warning! It will spend you very long time!)
 
 
