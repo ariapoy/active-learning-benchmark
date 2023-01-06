@@ -484,14 +484,15 @@ if __name__ == '__main__':
         res = res.drop_duplicates(keep='last')
         res.to_csv(f'{export_name}-aubc.csv', index=None)
 
-        confusion_mats_fin.to_csv(f'{export_name}-CM.csv', mode="a", header=None)
-        res = pd.read_csv(f'{export_name}-CM.csv')
-        res.columns = ['expno', 'round', 'tn', 'fp', 'fn', 'tp']
-        res = res.drop_duplicates(keep='last')
-        res.to_csv(f'{export_name}-CM.csv', index=None)
+        # export confusion matrix
+        # confusion_mats_fin.to_csv(f'{export_name}-CM.csv', mode="a", header=None)
+        # res = pd.read_csv(f'{export_name}-CM.csv')
+        # res.columns = ['expno', 'round', 'tn', 'fp', 'fn', 'tp']
+        # res = res.drop_duplicates(keep='last')
+        # res.to_csv(f'{export_name}-CM.csv', index=None)
     else:
         res.to_csv(f'{export_name}-aubc.csv', index=None)
-        confusion_mats_fin.to_csv(f'{export_name}-CM.csv')
+        # confusion_mats_fin.to_csv(f'{export_name}-CM.csv')
 
     if len(error_log) > 0:
         logging_print('algo', f'|{repr(error_log)}|||||', level='error')
