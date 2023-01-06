@@ -17,8 +17,8 @@ Related work: [#SV74 A Comparative Survey: Benchmarking for Pool-based Active Le
 5. `git clone https://github.com/ariapoy/ALiPy.git alipy-dev; cp -r alipy-dev/alipy alipy-dev/alipy_dev`
 6. `apt install build-essential gfortran libatlas-base-dev liblapacke-dev python3-dev -y`
 7. `git clone https://github.com/ariapoy/libact.git libact-dev; cd libact-dev; python setup.py build; python setup.py install; cd ..; cp -r libact-dev/libact libact-dev/libact_dev`
-8. `cd data; bash get_data_zhan21.sh; cd ..`.
-9. `cd src; python main.py -h`.
+8. `cd data; bash get_data_zhan21.sh; cd ..`
+9. `cd src; python main.py -h`
 
 **Warning!** If you use Python == 3.10
 
