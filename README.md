@@ -24,6 +24,10 @@ Related work: [#SV74 A Comparative Survey: Benchmarking for Pool-based Active Le
 
 1. `git clone https://github.com/ariapoy/ALiPy.git alipy-dev; cd alipy-dev; git checkout py3.10; cd .. ; cp -r alipy-dev/alipy alipy-dev/alipy_dev`
 
+**Warning!** If your env cannot support liblapack
+
+1. `git clone https://github.com/ariapoy/libact.git libact-dev; cd libact-dev; LIBACT_BUILD_VARIANCE_REDUCTION=0 python setup.py build; LIBACT_BUILD_VARIANCE_REDUCTION=0 python setup.py install; cd ..; cp -r libact-dev/libact libact-dev/libact_dev`
+
 ## Quick Start
 
 Run an experiment.
