@@ -14,8 +14,11 @@ def exp_compute(seed, data_set, qs_name, hs_name, tst_size, init_lbl_size, modul
         "../data/dataset_used_in_ALSurvey/{0}-svmstyle.txt".format(data_set))
     X, y = data[0], data[1]
     X = np.asarray(X.todense())
-    if -1 not in set(y):
-        y[y==0] = -1  # bug for hintsvm, dwus?
+    if np.unique(y).shape[0] == 2:  # binary
+        if -1 not in set(y):
+            y[y==0] = -1  # bug for hintsvm, dwus?
+    else:
+        pass
 
     # initial setttings
     # total budget
@@ -463,16 +466,17 @@ if __name__ == '__main__':
     learn_curve = pd.DataFrame(learn_curve)
     learn_curve.index = [init_lbl_size] + [init_lbl_size+1+b for b in budget]
     learn_curve = learn_curve.T
-    confusion_mats = {k: pd.DataFrame(confusion_mats[k]) for k in confusion_mats}
-    confusion_mats_fin = []
-    for k in confusion_mats:
-        confusion_mats[k]['expno'] = k
-        confusion_mats[k]['round'] = [init_lbl_size] + [init_lbl_size+1+b for b in budget]
-        confusion_mats_fin.append(confusion_mats[k])
-    confusion_mats_fin = pd.concat(confusion_mats_fin, ignore_index=True)
-    confusion_mats_fin.columns = ['tn', 'fp', 'fn', 'tp', 'expno', 'round']
-    confusion_mats_fin = confusion_mats_fin[['expno', 'round', 'tn', 'fp', 'fn', 'tp']]
-    confusion_mats_fin = confusion_mats_fin.set_index('expno')
+    # TODO only support binary classification
+    # confusion_mats = {k: pd.DataFrame(confusion_mats[k]) for k in confusion_mats}
+    # confusion_mats_fin = []
+    # for k in confusion_mats:
+    #     confusion_mats[k]['expno'] = k
+    #     confusion_mats[k]['round'] = [init_lbl_size] + [init_lbl_size+1+b for b in budget]
+    #     confusion_mats_fin.append(confusion_mats[k])
+    # confusion_mats_fin = pd.concat(confusion_mats_fin, ignore_index=True)
+    # confusion_mats_fin.columns = ['tn', 'fp', 'fn', 'tp', 'expno', 'round']
+    # confusion_mats_fin = confusion_mats_fin[['expno', 'round', 'tn', 'fp', 'fn', 'tp']]
+    # confusion_mats_fin = confusion_mats_fin.set_index('expno')
 
     res["res_lbl_score"].mean(), res["res_tst_score"].mean()
 
