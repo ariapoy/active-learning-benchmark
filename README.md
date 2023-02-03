@@ -37,7 +37,9 @@ Run an experiment.
 Reproduce all results. (Warning! It will spend you very long time!)
 
 ```shell
-cd results; gdown 1qzezDD_fe43ctNBHC4H5W0w6skJcBlxB -O aubc.zip
-unzip aubc.zip
+cd results; gdown 1qzezDD_fe43ctNBHC4H5W0w6skJcBlxB -O aubc.zip;
+unzip aubc.zip;
+gdown 1xKUT3CHHOwYY0yFxak1XKf3vWiAXQFSQ -O detail.zip;
+unzip detail.zip;
 # open and run analysis.ipynb
 ```

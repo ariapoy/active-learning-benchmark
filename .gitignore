@@ -140,4 +140,8 @@ alipy-log/
 *.csv
 !table3-xz2021.csv
 results/aubc/
+results/detail/
+results/lc-heart.png
+results/table6-super.tex
 Poy2022a
+tmp/
