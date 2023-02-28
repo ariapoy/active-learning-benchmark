@@ -245,8 +245,7 @@ def exp_compute(seed, data_set, qs_name, hs_name, tst_size, init_lbl_size, modul
         try:
             results = google_al(X_trn, y_trn, X_tst, y_tst, idx_lbl,
                                 qs, uniform_qs, model_select, model_score, quota, batch_size=1,
-                                X_all=X, y_all=y, indices=idx, seed=seed, configs=args,
-                                idxs=[idx, idx_trn, idx_tst, idx_lbl])  # check
+                                X_all=X, y_all=y, indices=idx_trn, seed=seed, configs=args)
         except Exception as e:
             logging_print('framework', f'|Error by {e}|||||', level='error')
             results = e
@@ -469,6 +468,7 @@ if __name__ == '__main__':
         confusion_mats[k]['expno'] = k
         confusion_mats[k]['round'] = [init_lbl_size] + [init_lbl_size+1+b for b in budget]
         confusion_mats_fin.append(confusion_mats[k])
+
     confusion_mats_fin = pd.concat(confusion_mats_fin, ignore_index=True)
     confusion_mats_fin.columns = ['tn', 'fp', 'fn', 'tp', 'expno', 'round']
     confusion_mats_fin = confusion_mats_fin[['expno', 'round', 'tn', 'fp', 'fn', 'tp']]

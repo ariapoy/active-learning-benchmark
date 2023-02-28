@@ -23,7 +23,6 @@ def google_al(X_trn, y_trn, X_tst, y_tst, idx_lbl,
               **kwargs):
     configs = kwargs['configs']
     seed = kwargs['seed']
-    idxs = kwargs['idxs']
     # file = open(f'{configs.data_set}-{configs.qs_name}-{configs.hs_name}-{configs.gs_name}-{configs.exp_name}-detail.csv', 'a')
 
     y_all = kwargs.get("y_all")
@@ -58,8 +57,7 @@ def google_al(X_trn, y_trn, X_tst, y_tst, idx_lbl,
     confusion_mat_curr = confusion_matrix(y_tst, y_pred).ravel()
     hist_info['confusion_mat_ini'] = confusion_mat_curr
     # file.write(f'{seed}|{al_round}|{E_tst_score_curr}|{exec_train_time}|\n')
-    idx_lbl = repr(kwargs['idxs'][3].tolist())
-    logging_print('init', f'|{seed}|{al_round}|{E_tst_score_curr}|{exec_train_time:.3f}||{idx_lbl}')
+    logging_print('init', f'|{seed}|{al_round}|{E_tst_score_curr}|{exec_train_time:.3f}|')
 
     while quota_used < quota:
         # mqke query and get required sample id
@@ -107,8 +105,7 @@ def google_al(X_trn, y_trn, X_tst, y_tst, idx_lbl,
         hist_info['confusion_mat'].append(confusion_mat_curr)
 
         # file.write(f'{seed}|{al_round}|{E_tst_score_curr}|{exec_train_time}|{exec_query_time}\n')
-        idx_lbl = repr(indices[selected_inds][-1])
-        logging_print('update', f'|{seed}|{al_round}|{E_tst_score_curr}|{exec_train_time:.3f}|{exec_query_time:.3f}|{idx_lbl}')
+        logging_print('update', f'|{seed}|{al_round}|{E_tst_score_curr}|{exec_train_time:.3f}|{exec_query_time:.3f}')
 
         # update used quota
         quota_used += batch_size
