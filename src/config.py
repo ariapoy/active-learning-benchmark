@@ -121,8 +121,8 @@ def QueryStrategyBuilder(name):
         return { "qs": libact_DWUS, "params": {"n_clusters": 5, "sigma": 0.1, "max_iter": 100, "tol": 1e-4, "C": 1.0,"kmeans_param": {}, "random_state": 1126 }}
     if name == 'quire-zhan':
         return { "qs": libact_QUIRE, "params": {"lambda": 1.0, "kernel": "rbf", "degree": 3, "gamma": 1.0, "coef0": 1.0 }}
-    if name == 'hintsvm':
-        return { "qs": libact_HSVM, "params": {"Cl": 1.0, "Ch": 1.0, "p": 0.5, "random_state": 1126, "kernel": "rbf", "degree": 3, "gamma": 0.1, "coef0": 0.0, "tol": 1e-3, "shrinking": 1, "cache_size": 100 }}
+    if name == 'hintsvm-alignG-zhan':
+        return { "qs": libact_HSVM, "params": {"model": None, "Cl": 1.0, "Ch": 1.0, "p": 0.5, "random_state": 1126}}
     if name == 'hintsvm-zhan':
         return { "qs": libact_HSVM,"params": {"Cl": 1.0, "Ch": 1.0, "p": 0.5, "random_state": 1126, "kernel": "linear", "degree": 3, "gamma": 0.1, "coef0": 0.0, "tol": 1e-3, "shrinking": 1, "cache_size": 100 }}
     if name == 'qbc-zhan':
