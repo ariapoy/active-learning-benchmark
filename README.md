@@ -30,11 +30,22 @@ Related work: [#SV74 A Comparative Survey: Benchmarking for Pool-based Active Le
 
 ## Quick Start
 
-Run an experiment.
+1. Run an experiment by yourself.
 
-`python main.py`
+```shell
+cd src; python main.py -h  # see help function
+```
 
-Reproduce all results. (Warning! It will spend you very long time!)
+2. Reproduce all results in Zhan et al. (Warning! It will spend you very long time!)
+
+```shell
+cd src;
+bash run-reproduce.sh  # run all small datasets
+bash run-reproduce-large.sh  # run all large datasets
+bash run-reproduce-infeasible.sh  # run all infeasible time datasets, only for time test
+```
+
+3. Reproduce all figures and tables in this work.
 
 ```shell
 cd results; gdown 1qzezDD_fe43ctNBHC4H5W0w6skJcBlxB -O aubc.zip;
