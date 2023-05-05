@@ -1,6 +1,7 @@
 # Active Learning Benchmark
 
 Related work: [#SV74 A Comparative Survey: Benchmarking for Pool-based Active Learning](https://ijcai-21.org/program-survey/)
+(*Update on 04/17* We found Zhan et al. released their source code: <https://github.com/SineZHAN/ComparativeSurveyIJCAI2021PoolBasedAL>)
 
 ## Requriements
 
@@ -44,6 +45,9 @@ bash run-reproduce.sh  # run all small datasets
 bash run-reproduce-large.sh  # run all large datasets
 bash run-reproduce-infeasible.sh  # run all infeasible time datasets, only for time test
 ```
+**Note**
+- `N_JOBS`: number of workers. User can accelerate according to their number of CPUs.
+  **WARNING!** Some methods could be slower because of insufficient resource.
 
 3. Reproduce all figures and tables in this work.
 
