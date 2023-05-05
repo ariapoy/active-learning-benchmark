@@ -1,6 +1,6 @@
 TASK="zhan";
 s="0";
-N_EXP="1";
+N_EXP="15";
 N_JOBS="1";
 for data in "spambase" "banana" "phoneme" "ringnorm" "twonorm" "phishing"; do
     # google

@@ -1,7 +1,7 @@
 # exp settings
 TASK="zhan";
 SEED="0";
-N_EXP="100";
+N_EXP="150";
 # For multi-processing
 N_JOBS="1";
 END=$(($SEED + $N_EXP - 1));
