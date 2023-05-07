@@ -54,18 +54,8 @@ def SelectModelBuilder(name):
         return _SVCBuilder()
     if name == 'RBFSVMProb':
         return _SVCBuilder(probability=True)
-    if name == 'RBFSVMProbC=0.125':
-        return _SVCBuilder(probability=True, C=0.125)
-    if name == 'RBFSVMProbC=512':
-        return _SVCBuilder(probability=True, C=512)
-    if name == 'RBFSVMProbgamma=scale':
-        return _SVCBuilder(probability=True, gamma='scale')
-    if name == 'RBFSVMProbgamma=0.0078125':
-        return _SVCBuilder(probability=True, gamma=0.0078125)
-    if name == 'RBFSVMProbgamma=8':
-        return _SVCBuilder(probability=True, gamma=8)
-    if name == 'LRC=1e-1':
-        return _logisticRegressionBuilder(C=0.1)
+    if name == 'LR':
+        return _logisticRegressionBuilder()
     if name == 'us-zhan':
         return _logisticRegressionBuilder(C=0.1)
     if name == 'qbc-zhan':
@@ -97,10 +87,12 @@ def ScoreModelBuilder(name):
         return _RandomForest()
     if name == 'RBFSVMProb':
         return _SVCBuilder(probability=True)
+    if name == 'LR':
+        return _logisticRegressionBuilder()
     if name == 'LRC=1e-1':
         return _logisticRegressionBuilder(C=0.1)
-    if name == 'RBFSVMProbC=1e-1':
-        return _SVCBuilder(probability=True)
+    if name == 'RBFSVM':
+        return _SVCBuilder()
     if 'zhan' in name:
         return _SVCBuilder()
 
