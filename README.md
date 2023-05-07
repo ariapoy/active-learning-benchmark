@@ -26,7 +26,7 @@ Related work: [#SV74 A Comparative Survey: Benchmarking for Pool-based Active Le
 
 **Warning!** If your env cannot support liblapack
 
-4. `git clone https://github.com/ariapoy/libact.git libact-dev; cd libact-dev; LIBACT_BUILD_VARIANCE_REDUCTION=0 python setup.py build; LIBACT_BUILD_VARIANCE_REDUCTION=0 python setup.py install; cd ..; cp -r libact-dev/libact libact-dev/libact_dev`
+6. `git clone https://github.com/ariapoy/libact.git libact-dev; cd libact-dev; LIBACT_BUILD_VARIANCE_REDUCTION=0 python setup.py build; LIBACT_BUILD_VARIANCE_REDUCTION=0 python setup.py install; cd ..; cp -r libact-dev/libact libact-dev/libact_dev`
 
 You CANNOT obtain the results of Variability Reduction (VR) for the benchmark.
 
