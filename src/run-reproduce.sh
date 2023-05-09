@@ -95,7 +95,7 @@ for data in "appendicitis" "sonar" "parkinsons" "ex8b" "heart" "haberman" "ionos
 done
 
 # 4. alipy
-OOL="alipy";
+TOOL="alipy";
 
 ## 4.1 eer-zhan
 QS="eer-zhan";
