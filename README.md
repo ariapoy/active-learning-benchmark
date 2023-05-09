@@ -42,8 +42,10 @@ cd src; python main.py -h  # see help function
 
 ```shell
 cd src;
-bash run-reproduce.sh  # run all small datasets
-bash run-reproduce-large.sh  # run all large datasets
+bash run-reproduce-google.sh  # run all google datasets
+bash run-reproduce-libact.sh  # run all libact datasets
+bash run-reproduce-libact.sh  # run all libact datasets
+bash run-reproduce-bso.sh  # run all bso datasets
 bash run-reproduce-infeasible.sh  # run all infeasible time datasets, only for time test
 ```
 **Note**
