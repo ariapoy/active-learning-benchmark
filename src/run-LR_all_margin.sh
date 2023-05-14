@@ -12,9 +12,10 @@ QUERY="LR";
 # Task model
 TASK="LR";
 
-## 3.3 margin-zhan
+# margin-zhan
 # for data in "appendicitis" "sonar" "parkinsons" "ex8b" "heart" "haberman" "ionosphere" "clean1" "breast" "wdbc" "australian" "diabetes" "mammographic" "ex8a" "tic" "german" "splice" "gcloudb" "gcloudub" "checkerboard"; do
-for data in "ex8a"; do
+# for data in "ex8a"; do
+for data in "sonar" "haberman" "ionosphere" "tic" "gcloudb" "appendicitis" "checkerboard" "breast"; do
     echo "Start $QS with $HS of $data on $EXP with $N_JOBS"
     for s in $(seq $SEED $N_JOBS $END); do #
         timeout 25920 python main.py --tool $TOOL --qs_name $QS --hs_name $QUERY --gs_name $TASK --seed $s --n_jobs $N_JOBS --n_trials $N_JOBS --data_set $data;
