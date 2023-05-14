@@ -20,7 +20,11 @@ Related work: [#SV74 A Comparative Survey: Benchmarking for Pool-based Active Le
 7. `cd data; bash get_data_zhan21.sh; cd ..`
 8. `cd src; python main.py -h`
 
-**Warning!** If you use Python == 3.10
+**Warning!** If you use Python == 3.11
+
+3. `pip install -r requirements-3.11.txt`
+
+**Warning!** If you use Python >= 3.10
 
 5. `git clone https://github.com/ariapoy/ALiPy.git alipy-dev; cd alipy-dev; git checkout py3.10; cd .. ; cp -r alipy-dev/alipy alipy-dev/alipy_dev`
 
