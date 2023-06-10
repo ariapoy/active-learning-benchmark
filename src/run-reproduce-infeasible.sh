@@ -25,9 +25,9 @@ echo "Large datasets!"
 # quire
 QUERY="libact-zhan";
 for QS in "quire-zhan"; do
-  for data in "spambase"; do
+  for data in "spambase" "phoneme" "ringnorm" "twonorm" "phishing"; do
     echo "Start $QS with $QUERY on $data, repeated $N_EXP times with $N_JOBS process."
-    if [ "$data" == "spambase" ] && [ "$qs" == "uniform" ]; then
+    if [ "$data" == "spambase" ] && [ "$qs" == "quire-zhan" ]; then
         echo "quire-zhan occurs errors on spambase";
     fi
     for s in $(seq $SEED $N_JOBS $END); do #
@@ -50,8 +50,8 @@ done
 echo "alipy infeasible"
 TOOL="alipy";
 
-echo "Small datasets!"
 # spal-zhan
+QUERY="alipy-zhan";
 QS="spal-zhan"
 for data in "checkerboard"; do
   echo "Start $QS with $QUERY on $data, repeated $N_EXP times with $N_JOBS process."
@@ -62,42 +62,38 @@ done
 
 echo "Large datasets!"
 # eer-zhan
-QS="eer-zhan";
 QUERY="eer-zhan";
+QS="eer-zhan";
 for data in "spambase" "banana" "phoneme" "ringnorm" "twonorm" "phishing"; do
-  for QS in "uniform-zhan" "margin-zhan" "hier-zhan" "mcm-zhan" "graph-zhan" "infodiv-zhan"; do
-    echo "Start $QS with $QUERY on $data, repeated $N_EXP times with $N_JOBS process."
-      for s in $(seq $SEED $N_JOBS $END); do #
-        timeout 259200 python main.py --tool $TOOL --qs_name $QS --hs_name $QUERY --gs_name $TASK --seed $s --n_jobs $N_JOBS --n_trials $N_JOBS --data_set $data;
-      done
+  echo "Start $QS with $QUERY on $data, repeated $N_EXP times with $N_JOBS process."
+  for s in $(seq $SEED $N_JOBS $END); do #
+    timeout 259200 python main.py --tool $TOOL --qs_name $QS --hs_name $QUERY --gs_name $TASK --seed $s --n_jobs $N_JOBS --n_trials $N_JOBS --data_set $data;
   done
 done
 
 # bmdr-zhan
+QUERY="alipy-zhan";
 QS="bmdr-zhan"
 for data in "spambase" "banana" "phoneme" "ringnorm" "twonorm" "phishing"; do
-  for QS in "uniform-zhan" "margin-zhan" "hier-zhan" "mcm-zhan" "graph-zhan" "infodiv-zhan"; do
-    echo "Start $QS with $QUERY on $data, repeated $N_EXP times with $N_JOBS process."
-      for s in $(seq $SEED $N_JOBS $END); do #
-        timeout 259200 python main.py --tool $TOOL --qs_name $QS --hs_name $QUERY --gs_name $TASK --seed $s --n_jobs $N_JOBS --n_trials $N_JOBS --data_set $data;
-      done
+  echo "Start $QS with $QUERY on $data, repeated $N_EXP times with $N_JOBS process."
+  for s in $(seq $SEED $N_JOBS $END); do #
+    timeout 259200 python main.py --tool $TOOL --qs_name $QS --hs_name $QUERY --gs_name $TASK --seed $s --n_jobs $N_JOBS --n_trials $N_JOBS --data_set $data;
   done
 done
 
 # spal-zhan
+QUERY="alipy-zhan";
 QS="spal-zhan"
 for data in "spambase" "banana" "phoneme" "ringnorm" "twonorm" "phishing"; do
-  for QS in "uniform-zhan" "margin-zhan" "hier-zhan" "mcm-zhan" "graph-zhan" "infodiv-zhan"; do
-    echo "Start $QS with $QUERY on $data, repeated $N_EXP times with $N_JOBS process."
-      for s in $(seq $SEED $N_JOBS $END); do #
-        timeout 259200 python main.py --tool $TOOL --qs_name $QS --hs_name $QUERY --gs_name $TASK --seed $s --n_jobs $N_JOBS --n_trials $N_JOBS --data_set $data;
-      done
+  echo "Start $QS with $QUERY on $data, repeated $N_EXP times with $N_JOBS process."
+  for s in $(seq $SEED $N_JOBS $END); do #
+    timeout 259200 python main.py --tool $TOOL --qs_name $QS --hs_name $QUERY --gs_name $TASK --seed $s --n_jobs $N_JOBS --n_trials $N_JOBS --data_set $data;
   done
 done
 
 # BSO
 echo "bso infeasible"
-TOOL="bso";  # "google" "libact" "alipy" "bso"
+TOOL="bso";
 QS="bso-zhan";
 BSOCONF="lookDtst";  # for BSO only
 QUERY="bso-zhan";
