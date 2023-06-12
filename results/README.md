@@ -1,6 +1,6 @@
 # Benchmark of pool-based active learning
 
-Mean(Standard Deviation) of Uniform (Random Sampling), 17 query strategies and Beam-Search Oracle (BSO) on 26 binary datasets.
+Mean±Standard Deviation of Uniform (Random Sampling), 17 query strategies and Beam-Search Oracle (BSO) on 26 binary datasets.
 
 | data         | Uniform       | US-NC           | QBC             | HintSVM        | QUIRE          | ALBL           | DWUS           | VR              | Core-Set        | US-C            | Graph          | Hier            | InfoDiv       | MCM             | EER            | BMDR           | SPAL           | LAL             | nan           |
 |:-------------|:--------------|:----------------|:----------------|:---------------|:---------------|:---------------|:---------------|:----------------|:----------------|:----------------|:---------------|:----------------|:--------------|:----------------|:---------------|:---------------|:---------------|:----------------|:--------------|
@@ -32,7 +32,7 @@ Mean(Standard Deviation) of Uniform (Random Sampling), 17 query strategies and B
 | Phishing     | 0.9382±0.0048 | 0.9391±0.004¹   | 0.9441³±0.0042² | 0.9296±0.0052  | TLE            | 0.942±0.0043³  | 0.8923±0.0105  | TLE             | 0.9406±0.0043   | 0.946¹±0.0049   | 0.9327±0.0053  | 0.938±0.0049    | 0.946±0.0049  | 0.9449²±0.0047  | TLE            | TLE            | TLE            | 0.9429±0.0045   | TLE           |# Usefulness of query strategies
 
 Mean difference of the query strategy from Uniform
-`*' and `**' mean reject pair $t$-test with significance level $0.05$ and $0.01$ respectively.
+\`*' and \`**' mean reject pair $t$-test with significance level $0.05$ and $0.01$ respectively.
 
 - The `⚠️' means not enough number of repeated experiments.
 - The `🤔' means hard to differentiate the performance of different query strategies.
