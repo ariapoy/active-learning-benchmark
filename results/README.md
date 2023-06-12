@@ -1,6 +1,6 @@
 # Benchmark of pool-based active learning
 
-Mean±Standard Deviation of Uniform (Random Sampling), 17 query strategies and Beam-Search Oracle (BSO) on 26 binary datasets.
+Summary Table: Mean±Standard Deviation AUBC of Uniform (Random Sampling), 17 query strategies and Beam-Search Oracle (BSO) on 26 binary datasets.
 
 | data         | Uniform       | US-NC           | QBC             | HintSVM        | QUIRE          | ALBL           | DWUS           | VR              | Core-Set        | US-C            | Graph          | Hier            | InfoDiv       | MCM             | EER            | BMDR           | SPAL           | LAL             | nan           |
 |:-------------|:--------------|:----------------|:----------------|:---------------|:---------------|:---------------|:---------------|:----------------|:----------------|:----------------|:---------------|:----------------|:--------------|:----------------|:---------------|:---------------|:---------------|:----------------|:--------------|
