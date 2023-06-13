@@ -1,4 +1,4 @@
-# Active Learning Benchmark
+# Pool-Based Active Learning Benchmark
 
 This is an implementation of our paper: "Re-benchmarking Pool-Based Active Learning for Binary Classification"
 
