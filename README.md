@@ -1,7 +1,9 @@
 # Active Learning Benchmark
 
-Related work: [#SV74 A Comparative Survey: Benchmarking for Pool-based Active Learning](https://ijcai-21.org/program-survey/)
-(*Update on 04/17* We found Zhan et al. released their source code: <https://github.com/SineZHAN/ComparativeSurveyIJCAI2021PoolBasedAL>)
+This is an implementation of our paper: "Re-benchmarking Pool-Based Active Learning for Binary Classification"
+
+We reproduce and benchmark the previous work: [#SV74 A Comparative Survey: Benchmarking for Pool-based Active Learning](https://ijcai-21.org/program-survey/)
+(*Update on 04/17* Zhan et al. released their source code: <https://github.com/SineZHAN/ComparativeSurveyIJCAI2021PoolBasedAL>)
 
 ## Requriements
 
@@ -66,3 +68,23 @@ unzip detail.zip;
 python analysis.py;  # choice 1
 # open and run analysis.ipynb  # choice 2
 ```
+
+## Citing
+If you use our code in your research or applications, please consider citing our paper and previous paper.
+
+```
+
+```
+
+```
+@inproceedings{zhan2021comparative,
+  title={A Comparative Survey: Benchmarking for Pool-based Active Learning.},
+  author={Zhan, Xueying and Liu, Huan and Li, Qing and Chan, Antoni B},
+  booktitle={IJCAI},
+  pages={4679--4686},
+  year={2021}
+}
+```
+
+## Contact
+If you have any further questions or want to discuss Active Learning with me, please contact Po-Yi (Poy) Lu <ariapoy@gmail.com>/<d09944015@csie.ntu.edu.tw>.
