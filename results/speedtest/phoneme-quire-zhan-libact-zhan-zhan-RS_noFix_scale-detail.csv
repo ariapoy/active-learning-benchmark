@@ -1,0 +1,50 @@
+06-11 06:19:38 INFO     [exp] seed None: |phoneme-quire-zhan-libact-zhan-zhan-RS_noFix_scale Start|||||
+06-11 06:19:39 INFO     [init] seed 0: |0|20|0.6396854764107308|0.003|
+06-11 06:26:55 INFO     [update] seed 0: |0|21|0.637372802960222|0.007|435.460
+06-11 06:34:11 INFO     [update] seed 0: |0|22|0.623959296947271|0.003|436.740
+06-11 06:41:28 INFO     [update] seed 0: |0|23|0.6285846438482886|0.003|436.994
+06-11 06:48:45 INFO     [update] seed 0: |0|24|0.6424606845513413|0.002|436.840
+06-11 06:49:38 INFO     [exp] seed None: |phoneme-quire-zhan-libact-zhan-zhan-RS_noFix_scale Start|||||
+06-11 06:49:39 INFO     [init] seed 1: |1|20|0.7146160962072156|0.002|
+06-11 06:56:55 INFO     [update] seed 1: |1|21|0.7146160962072156|0.002|436.405
+06-11 07:04:12 INFO     [update] seed 1: |1|22|0.7146160962072156|0.002|436.404
+06-11 07:11:28 INFO     [update] seed 1: |1|23|0.7146160962072156|0.002|436.020
+06-11 07:18:45 INFO     [update] seed 1: |1|24|0.7146160962072156|0.002|436.893
+06-11 07:19:38 INFO     [exp] seed None: |phoneme-quire-zhan-libact-zhan-zhan-RS_noFix_scale Start|||||
+06-11 07:19:39 INFO     [init] seed 2: |2|20|0.6993524514338575|0.002|
+06-11 07:26:55 INFO     [update] seed 2: |2|21|0.6993524514338575|0.002|436.062
+06-11 07:34:11 INFO     [update] seed 2: |2|22|0.6988899167437558|0.002|436.428
+06-11 07:41:29 INFO     [update] seed 2: |2|23|0.6988899167437558|0.002|437.205
+06-11 07:48:45 INFO     [update] seed 2: |2|24|0.6993524514338575|0.002|436.655
+06-11 07:49:38 INFO     [exp] seed None: |phoneme-quire-zhan-libact-zhan-zhan-RS_noFix_scale Start|||||
+06-11 07:49:39 INFO     [init] seed 3: |3|20|0.7035152636447733|0.003|
+06-11 07:56:55 INFO     [update] seed 3: |3|21|0.7035152636447733|0.002|436.464
+06-11 08:04:12 INFO     [update] seed 3: |3|22|0.7035152636447733|0.008|436.244
+06-11 08:11:29 INFO     [update] seed 3: |3|23|0.7053654024051804|0.003|437.226
+06-11 08:18:46 INFO     [update] seed 3: |3|24|0.7049028677150786|0.003|437.002
+06-11 08:19:38 INFO     [exp] seed None: |phoneme-quire-zhan-libact-zhan-zhan-RS_noFix_scale Start|||||
+06-11 08:19:39 INFO     [init] seed 4: |4|20|0.6799259944495837|0.002|
+06-11 08:26:56 INFO     [update] seed 4: |4|21|0.6790009250693803|0.002|437.449
+06-11 08:34:15 INFO     [update] seed 4: |4|22|0.6799259944495837|0.002|438.421
+06-11 08:41:34 INFO     [update] seed 4: |4|23|0.6827012025901943|0.002|439.217
+06-11 08:48:52 INFO     [update] seed 4: |4|24|0.6859389454209066|0.002|437.406
+06-11 08:49:38 INFO     [exp] seed None: |phoneme-quire-zhan-libact-zhan-zhan-RS_noFix_scale Start|||||
+06-11 08:49:39 INFO     [init] seed 5: |5|20|0.7428307123034228|0.002|
+06-11 08:56:56 INFO     [update] seed 5: |5|21|0.7409805735430157|0.002|436.881
+06-11 09:04:13 INFO     [update] seed 5: |5|22|0.7419056429232193|0.002|436.980
+06-11 09:11:32 INFO     [update] seed 5: |5|23|0.740518038852914|0.002|438.614
+06-11 09:18:50 INFO     [update] seed 5: |5|24|0.7414431082331174|0.002|437.998
+06-11 09:19:38 INFO     [exp] seed None: |phoneme-quire-zhan-libact-zhan-zhan-RS_noFix_scale Start|||||
+06-11 09:19:39 INFO     [init] seed 6: |6|20|0.7497687326549491|0.002|
+06-11 09:26:56 INFO     [update] seed 6: |6|21|0.7479185938945421|0.002|437.319
+06-11 09:34:14 INFO     [update] seed 6: |6|22|0.7469935245143385|0.002|437.239
+06-11 09:41:32 INFO     [update] seed 6: |6|23|0.7474560592044404|0.002|438.420
+06-11 09:48:49 INFO     [update] seed 6: |6|24|0.744218316373728|0.002|436.784
+06-11 09:49:38 INFO     [exp] seed None: |phoneme-quire-zhan-libact-zhan-zhan-RS_noFix_scale Start|||||
+06-11 09:49:39 INFO     [init] seed 7: |7|20|0.7266419981498612|0.002|
+06-11 09:56:55 INFO     [update] seed 7: |7|21|0.7238667900092507|0.002|436.252
+06-11 10:04:12 INFO     [update] seed 7: |7|22|0.7266419981498612|0.010|436.757
+06-11 10:11:29 INFO     [update] seed 7: |7|23|0.7247918593894542|0.003|436.622
+06-11 10:18:45 INFO     [update] seed 7: |7|24|0.7210915818686402|0.003|436.302
+06-11 10:19:38 INFO     [exp] seed None: |phoneme-quire-zhan-libact-zhan-zhan-RS_noFix_scale Start|||||
+06-11 10:19:39 INFO     [init] seed 8: |8|20|0.6387604070305273|0.003|
