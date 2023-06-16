@@ -1,9 +1,10 @@
 # Pool-Based Active Learning Benchmark
 
-This is an implementation of our paper: "Re-benchmarking Pool-Based Active Learning for Binary Classification"
+This is an implementation of our paper: "[Re-benchmarking Pool-Based Active Learning for Binary Classification](https://arxiv.org/abs/2306.08954)"
 
-We reproduce and benchmark the previous work: [#SV74 A Comparative Survey: Benchmarking for Pool-based Active Learning](https://ijcai-21.org/program-survey/)
-(*Update on 04/17* Zhan et al. released their source code: <https://github.com/SineZHAN/ComparativeSurveyIJCAI2021PoolBasedAL>)
+We reproduce and re-benchmark the previous work: [#SV74 A Comparative Survey: Benchmarking for Pool-based Active Learning](https://ijcai-21.org/program-survey/)
+
+*Update on 04/17*, we notice that *Zhan et al.* released the source code: <https://github.com/SineZHAN/ComparativeSurveyIJCAI2021PoolBasedAL>
 
 ## Requriements
 
@@ -44,7 +45,7 @@ You CANNOT obtain the results of Variability Reduction (VR) for the benchmark.
 cd src; python main.py -h  # see help function
 ```
 
-2. Reproduce all results in Zhan et al. (Warning! It will spend you very long time!)
+2. Reproduce all results in Zhan et al. (Warning! It will take you a very long time!)
 
 ```shell
 cd src;
@@ -55,8 +56,8 @@ bash run-reproduce-bso.sh  # run all bso datasets
 bash run-reproduce-infeasible.sh  # run all infeasible time datasets, only for time test
 ```
 **Note**
-- `N_JOBS`: number of workers. User can accelerate according to their number of CPUs.
-  **WARNING!** Some methods could be slower because of insufficient resource.
+- `N_JOBS`: number of workers. Users can accelerate according to their number of CPUs.
+  **WARNING!** Some methods could be slower because of insufficient resources.
 
 3. Reproduce all figures and tables in this work.
 
@@ -70,7 +71,7 @@ python analysis.py;  # choice 1
 ```
 
 ## Citing
-If you use our code in your research or applications, please consider citing our paper and previous paper.
+If you use our code in your research or applications, please consider citing our and previous papers.
 
 ```
 @misc{lu2023rebenchmarking,
