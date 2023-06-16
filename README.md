@@ -73,7 +73,14 @@ python analysis.py;  # choice 1
 If you use our code in your research or applications, please consider citing our paper and previous paper.
 
 ```
-
+@misc{lu2023rebenchmarking,
+      title={Re-Benchmarking Pool-Based Active Learning for Binary Classification}, 
+      author={Po-Yi Lu and Chun-Liang Li and Hsuan-Tien Lin},
+      year={2023},
+      eprint={2306.08954},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG}
+}
 ```
 
 ```
