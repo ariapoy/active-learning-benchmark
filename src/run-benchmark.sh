@@ -6,7 +6,7 @@ N_JOBS="1";
 END=$(($SEED + $N_EXP - 1));
 
 # small datasets
-for EPS in "0.1" "0.2" "0.3"; do
+for EPS in $(seq 0 0.1 1); do
   for data in "appendicitis" "sonar" "parkinsons" "ex8b" "heart" "haberman" "ionosphere" "clean1" "breast" "wdbc" "australian" "diabetes" "mammographic" "ex8a" "tic" "german" "splice" "gcloudb" "gcloudub" "checkerboard"; do
       echo "benchmark ($data, $EPS)"
     for s in $(seq $SEED $N_JOBS $END); do #
@@ -20,7 +20,7 @@ SEED="0";
 N_EXP="15";
 # For multi-processing
 END=$(($SEED + $N_EXP - 1));
-for EPS in "0.1" "0.2" "0.3"; do
+for EPS in $(seq 0 0.1 1); do
   for data in "spambase" "banana" "phoneme" "ringnorm" "twonorm" "phishing"; do
       echo "benchmark ($data, $EPS)"
     for s in $(seq $SEED $N_JOBS $END); do #
