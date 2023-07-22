@@ -18,8 +18,8 @@ We reproduce and re-benchmark the previous work: [#SV74 A Comparative Survey: Be
 ## Installation
 
 0. (optional) `apt install vim git python3 python3-venv build-essential gfortran libatlas-base-dev liblapacke-dev python3-dev -y`
-1. `git clone https://github.com/ariapoy/active-learning-benchmark.git mlrc2021; cd mlrc2021`
-2. `python3 -m venv mlrc21-env; source mlrc21-env/bin/activate`
+1. `git clone https://github.com/ariapoy/active-learning-benchmark.git act-benchmark; cd act-benchmark`
+2. `python3 -m venv act-env; source act-env/bin/activate`
 3. `pip install -r requirements.txt`
 4. `git clone https://github.com/ariapoy/active-learning.git`
 5. `git clone https://github.com/ariapoy/ALiPy.git alipy-dev; cp -r alipy-dev/alipy alipy-dev/alipy_dev`
