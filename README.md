@@ -6,6 +6,10 @@ We reproduce and re-benchmark the previous work: [#SV74 A Comparative Survey: Be
 
 *Update on 04/17*, we notice that *Zhan et al.* released the source code: <https://github.com/SineZHAN/ComparativeSurveyIJCAI2021PoolBasedAL>
 
+*Update on 07/23*, we merge our paper to the benchmark."[A More Robust Baseline for Active Learning by Injecting Randomness to Uncertainty Sampling](https://icml.cc/virtual/2023/27400)". Please change the branch to **robust-baseline**.
+
+- `git checkout robust-baseline`
+
 ## Requriements
 
 - Ubuntu >= 20.04.3 LTS (focal)
