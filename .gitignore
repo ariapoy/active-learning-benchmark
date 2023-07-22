@@ -135,7 +135,7 @@ active-learning/
 alipy-dev/
 dataset_used_in_ALSurvey/
 libact-dev/
-mlrc21-env/
+act-env/
 alipy-log/
 *.csv
 !table3-xz2021.csv
