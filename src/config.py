@@ -54,8 +54,18 @@ def SelectModelBuilder(name):
         return _SVCBuilder()
     if name == 'RBFSVMProb':
         return _SVCBuilder(probability=True)
-    if name == 'LR':
-        return _logisticRegressionBuilder()
+    if name == 'RBFSVMProbC=0.125':
+        return _SVCBuilder(probability=True, C=0.125)
+    if name == 'RBFSVMProbC=512':
+        return _SVCBuilder(probability=True, C=512)
+    if name == 'RBFSVMProbgamma=scale':
+        return _SVCBuilder(probability=True, gamma='scale')
+    if name == 'RBFSVMProbgamma=0.0078125':
+        return _SVCBuilder(probability=True, gamma=0.0078125)
+    if name == 'RBFSVMProbgamma=8':
+        return _SVCBuilder(probability=True, gamma=8)
+    if name == 'LRC=1e-1':
+        return _logisticRegressionBuilder(C=0.1)
     if name == 'us-zhan':
         return _logisticRegressionBuilder(C=0.1)
     if name == 'qbc-zhan':
@@ -87,18 +97,20 @@ def ScoreModelBuilder(name):
         return _RandomForest()
     if name == 'RBFSVMProb':
         return _SVCBuilder(probability=True)
-    if name == 'LR':
-        return _logisticRegressionBuilder()
     if name == 'LRC=1e-1':
         return _logisticRegressionBuilder(C=0.1)
-    if name == 'RBFSVM':
-        return _SVCBuilder()
+    if name == 'RBFSVMProbC=1e-1':
+        return _SVCBuilder(probability=True, C=0.1)
     if 'zhan' in name:
         return _SVCBuilder()
 
     raise NotImplementedError
 
 def QueryStrategyBuilder(name):
+    if 'ussoftmax' in name:
+        return {'qs': libact_USSoftmax, 'params': {'model': None, 'tau': None, 'random_state': 1126}}
+    if 'eps_greedy' in name:
+        return {'qs': libact_EPSGREEDY, 'params': {'model': None, 'epsilon': None, 'random_state': 1126}}
     if name == 'rs':
         return { "qs": libact_RS, "params": {"random_state": 1126 }}
     if name == 'us_lc':
@@ -136,10 +148,6 @@ def QueryStrategyBuilder(name):
 
     if name == 'uniform-zhan':
         return { "qs": AL_MAPPING["uniform"], "params": {"seed": 1126 }}
-    if name == 'libactUniform-zhan':
-        return { "qs": libact_RS, "params": {"random_state": 1126 }}
-    if name == 'alipyUniform-zhan':
-        return { "qs": QueryInstanceRandom, "params": {"seed": 1126 }, "select": {"batch_size": 1}}
     if name == 'margin-zhan':
         return { "qs": AL_MAPPING["margin"], "params": {"seed": 1126 }}
     if name == 'graph-zhan':
@@ -154,6 +162,8 @@ def QueryStrategyBuilder(name):
         return { "qs": QueryInstanceUncertainty, "params": {"measure": 'entropy'}, "select": {"model": None, "batch_size": 1} }
     if name == 'eer-zhan':
         return { "qs": QueryExpectedErrorReduction, "params": {}, "select": {"model": None, "batch_size": 1} }
+    if name == 'alipyRS':
+        return { "qs": QueryInstanceRandom, "params": {"seed": 1126 }, "select": {"batch_size": 1}}
     if name == 'bmdr-zhan':
         return { "qs": QueryInstanceBMDR, "params": { "beta": 1000, "gamma": 0.1, "rho": 1, "kernel": "rbf", "degree": 3, "gamma_ker": 1, "coef0": 1 }, "select": {"batch_size": 1, "qp_solver": 'ECOS'} }
     if name == 'spal-zhan':

@@ -37,6 +37,8 @@ try:
     from libact_dev.query_strategies import ActiveLearningByLearning as libact_ALBL
     from libact_dev.query_strategies import HintSVM as libact_HSVM
     from libact_dev.query_strategies import DWUS as libact_DWUS
+    from libact_dev.query_strategies import EpsilonGreedy as libact_EPSGREEDY
+    from libact_dev.query_strategies import USSoftmax as libact_USSoftmax
 except Exception as e:
     print('This env is not for libact.KCenterGreedy, libact.Margin')
     pass

@@ -184,6 +184,17 @@ def exp_compute(seed, data_set, qs_name, hs_name, tst_size, init_lbl_size, modul
         model_select_libact = model_select_libact_new
 
         # libact.qs
+        eps = kwargs.get('eps', None)
+        schedule = kwargs.get('schedule', None)
+        tau = kwargs.get('tau', None)
+        if 'ussoftmax' in qs_name:
+            assert tau is not None, f'No tau'
+            qs_dict['params']['tau'] = tau
+        elif 'eps_greedy' in qs_name:
+            assert eps is not None, f'No epsilon'
+            qs_dict['params']['epsilon'] = eps
+            qs_dict['params']['schedule'] = schedule
+
         if "model" in qs_dict["params"]:
             qs_dict["params"]["model"] = model_select_libact[0]
         elif "models" in qs_dict["params"]:
@@ -223,6 +234,10 @@ def exp_compute(seed, data_set, qs_name, hs_name, tst_size, init_lbl_size, modul
         except Exception as e:
             results = traceback.format_exc()
             logging_print('framework libact', f'|Error by {results}|||||', level='error')
+
+        # examine ratio of RS
+        # print(f'# of RS: {qs.cntRS}')
+        # print(f'epsilons: {qs.eps_history}')
 
     elif module == "google":
         ubl_len = idx_ubl.shape[0]
@@ -313,6 +328,17 @@ def parse_args():
     parser.add_argument('--qs_name', dest="qs_name",
                         help='Name of query strategy',
                         default="us-zhan", type=str)
+    # query strategy--EpsilonUncertainty
+    parser.add_argument('--eps', dest='eps',
+                        help='epsilon for epsilon uncertainty',
+                        default=0.1, type=float)
+    parser.add_argument('--schedule', dest='schedule',
+                        help='epsilon schedule for epsilon uncertainty',
+                        default=None, type=str)
+    # query strategy--SoftmaxUncertainty
+    parser.add_argument('--tau', dest='tau',
+                        help='temperature for softmax uncertainty',
+                        default=1, type=float)
     # query strategy--bso
     parser.add_argument('--lookDtst', dest='lookDtst',
                         help='type of bso',
@@ -360,6 +386,13 @@ if __name__ == '__main__':
     args = parse_args()
     if 'bso' in args.qs_name:
         args.exp_name += f'_{args.lookDtst}'
+    elif args.qs_name == 'eps_greedy':
+        args.qs_name += f'eps={args.eps}'
+    elif args.qs_name == 'ussoftmax':
+        args.qs_name += f'tau={args.tau}'
+
+    if args.schedule is not None:
+        args.qs_name += f'schedule={args.schedule}'  # 1: linear, 2: step with 20%
 
     # module
     tool_name = args.tool
@@ -381,7 +414,8 @@ if __name__ == '__main__':
     logging_print('exp', f'|{export_name} Start|||||', level='info')
 
     # for multi processing
-    other_configs = {'lookDtst': args.lookDtst, 'args': args, 'gs_name': gs_name,}
+    other_configs = {'lookDtst': args.lookDtst, 'args': args, 'gs_name': gs_name,
+            'eps': args.eps, 'tau': args.tau, 'schedule': args.schedule}
     def run(seed):
         logging_setup(f'{export_name}-detail')
         logging_set_seed(seed);
