@@ -32,7 +32,10 @@ def exp_compute(seed, data_set, qs_name, hs_name, tst_size, init_lbl_size, modul
         init_trn_tst_fixSeed = True
 
     init_trn_tst = init_trn_tst if init_trn_tst in {'RS', 'SameDist'} else 'SameDist'
-    init_trn_tst_fixSeed = not ('noFix' == init_trn_tst_fixSeed)  # True
+    if 'seed0' in args.exp_name:  # fix trn, tst
+        init_trn_tst_fixSeed = True
+    else:
+        init_trn_tst_fixSeed = not ('noFix' == init_trn_tst_fixSeed)  # True
 
     if init_trn_tst_fixSeed:
         rng_trntst = np.random.default_rng(0)
@@ -93,6 +96,11 @@ def exp_compute(seed, data_set, qs_name, hs_name, tst_size, init_lbl_size, modul
         rng_trntst.shuffle(idx_lbl)
         idx_ubl = np.setdiff1d(idx_trn, idx_lbl)
         idx_trn = np.append(idx_lbl, idx_ubl)
+    elif 'seed0' in init_lbl_ubl:  # fix seed 0
+        rng_lbl_ubl = np.random.default_rng(0)
+        rng_lbl_ubl.shuffle(idx_trn)
+        idx_lbl = idx_trn[:init_lbl_size]
+        idx_ubl = idx_trn[init_lbl_size:]
     else:  # if init_lbl_ubl == 'RS':
         # print('D_l is RS')
         rng_trntst.shuffle(idx_trn)
@@ -406,6 +414,8 @@ if __name__ == '__main__':
     data_set, tst_size, init_lbl_size = args.data_set, args.tst_size, args.init_lbl_size
     # env
     exp_name = args.exp_name
+    if 'seed0' in exp_name:
+        seed = 0
     # path
     export_name =  f'{data_set}-{qs_name}-{hs_name}-{gs_name}-{exp_name}'
     # logger
@@ -453,6 +463,7 @@ if __name__ == '__main__':
     learn_curve = {}
     confusion_mats = {}
     update_tst_acc = {}
+    qrd = []
     for expno, res, budget in res_list:
         if isinstance(res, dict):
             E_lbl_score_curr = AUBC_Zhan(budget, res["E_lbl_score"])
@@ -461,6 +472,7 @@ if __name__ == '__main__':
             res_dict["res_lbl_score"].append(E_lbl_score_curr)
             res_dict["res_tst_score"].append(E_tst_score_curr)
             learn_curve[expno] = [res['E_ini_score']] + res['E_tst_score']
+            qrd.append([expno] + res.get('qrd_idx', [None]))
             confusion_mats[expno] = np.vstack([res['confusion_mat_ini']] + res['confusion_mat'])
             # update detail
             for rnd, tst in enumerate(res["E_tst_score"]):
@@ -532,3 +544,13 @@ if __name__ == '__main__':
         logging_print('algo', f'|{repr(error_log)}|||||', level='error')
 
     logging_print('exp', f'|{export_name} End|||||', level='info')
+
+    if qrd[0] is not None:
+        qrd = pd.DataFrame(qrd)
+        if os.path.isfile(f'{export_name}-qrd.csv'):
+            qrd.to_csv(f'{export_name}-qrd.csv', index=None, mode="a", header=None)
+            qrd = pd.read_csv(f'{export_name}-qrd.csv')
+            qrd = qrd.drop_duplicates(keep='last')
+            qrd.to_csv(f'{export_name}-qrd.csv', index=None)
+        else:
+            qrd.to_csv(f'{export_name}-qrd.csv', index=None)

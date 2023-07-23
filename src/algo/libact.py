@@ -6,10 +6,10 @@ import numpy as np
 def libact_al(trn_ds, tst_ds, openmap_trn_ds, qs, model_select, model_score, quota, lbr, **kwargs):
     configs = kwargs['configs']
     seed = kwargs['seed']
-    # file = open(f'{configs.data_set}-{configs.qs_name}-{configs.hs_name}-{configs.gs_name}-{configs.exp_name}-detail.csv', 'a')
     # Results
     hist_info = {
-        "E_lbl_score": [], "E_trn_score": [], "E_tst_score": [], 'confusion_mat': []
+        "E_lbl_score": [], "E_trn_score": [], "E_tst_score": [], 'confusion_mat': [],
+        "qrd_idx": kwargs['idxs'][3].tolist(),  # idx_lbl
     }
     # quota
     quota_used = 0
@@ -49,6 +49,10 @@ def libact_al(trn_ds, tst_ds, openmap_trn_ds, qs, model_select, model_score, quo
         X, _ = zip(*trn_ds.data)
         if isinstance(ask_id, list):  # libact==1.0, for batch mode in the future
             ask_id = ask_id[0]
+
+        ask_id_orig = kwargs['idxs'][1][ask_id]
+        hist_info['qrd_idx'].append(ask_id_orig)
+
         exec_query_time = time.time() - start_query_time
         # Get y_u = y_ubl[ask_id] from labeler
         y_u = lbr.label(X[ask_id])
