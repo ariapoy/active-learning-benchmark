@@ -1,11 +1,5 @@
 # Pool-Based Active Learning Benchmark
 
-This is an implementation of our paper: "[Re-benchmarking Pool-Based Active Learning for Binary Classification](https://arxiv.org/abs/2306.08954)"
-
-We reproduce and re-benchmark the previous work: [#SV74 A Comparative Survey: Benchmarking for Pool-based Active Learning](https://ijcai-21.org/program-survey/)
-
-*Update on 04/17*, we notice that *Zhan et al.* released the source code: <https://github.com/SineZHAN/ComparativeSurveyIJCAI2021PoolBasedAL>
-
 *Update on 07/23*, we merge our paper to the benchmark."[A More Robust Baseline for Active Learning by Injecting Randomness to Uncertainty Sampling](https://icml.cc/virtual/2023/27400)". Please change the branch to **robust-baseline**.
 
 - `git checkout robust-baseline`
@@ -49,15 +43,13 @@ You CANNOT obtain the results of Variability Reduction (VR) for the benchmark.
 cd src; python main.py -h  # see help function
 ```
 
-2. Reproduce all results in Zhan et al. (Warning! It will take you a very long time!)
+2. Reproduce all results in the paper. (Warning! It will take you a very long time!)
 
 ```shell
 cd src;
-bash run-reproduce-google.sh  # run all google datasets
-bash run-reproduce-libact.sh  # run all libact datasets
-bash run-reproduce-libact.sh  # run all libact datasets
-bash run-reproduce-bso.sh  # run all bso datasets
-bash run-reproduce-infeasible.sh  # run all infeasible time datasets, only for time test
+bash run-benchmark.sh  # run epsilon-uncertainty sampling with different epsilons for the benchmark
+bash run-epsSchedule.sh  # run linear scheduling for the epsilon-uncertainty sampling
+bash run-biasvar.sh  # run to get history of query index for bias and variance analysis
 ```
 **Note**
 - `N_JOBS`: number of workers. Users can accelerate according to their number of CPUs.
