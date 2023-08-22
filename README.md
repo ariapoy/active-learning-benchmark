@@ -32,10 +32,13 @@ We provide below suggested future work:
 2. Provide new query strategy: we support libact, Google, and ALiPy modules.
     - Update `src/config.py` to import new query strategies.
 3. Provide new experimental settings: we provide common settings as arguments.
-    - Update `src/main.py` to adjust the settings such as size of test set, size of initial labeled pool, query-oriented model, task-oriented model, etc.
+    - Update `src/main.py` to adjust the settings such as the size of a test set, size of an initial labeled pool, query-oriented model, task-oriented model, etc.
 
 ```shell
-cd src; python main.py
+cd data; bash get_data.sh  # download datasets
+cd ..;
+cd src; python main.py  # run experiments
+python main.py -h  # call helper functions
 ```
 
 ## Requriements
