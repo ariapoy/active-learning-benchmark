@@ -10,6 +10,34 @@ We reproduce and re-benchmark the previous work: [#SV74 A Comparative Survey: Be
 
 - `git checkout robust-baseline`
 
+## Quick start
+
+**Call for Contribution and Future Work**
+
+We call for the community to further provide more experimental results to this benchmark.
+We provide below suggested future work:
+1. Tasks and domains
+    - multi-class classifications
+    - regression problems
+    - image classifications
+    - object detection
+    - natural language processing
+2. Evaluation metrics
+    - Deficiency score, Data Utilization Rate, Start Quality, and Average End Quality
+
+### How to start?
+
+1. Provide new datasets: we support LIBSVM dataset format.
+    - Update `data/get_data.sh` to download more tabular data.
+2. Provide new query strategy: we support libact, Google, and ALiPy modules.
+    - Update `src/config.py` to import new query strategies.
+3. Provide new experimental settings: we provide common settings as arguments.
+    - Update `src/main.py` to adjust the settings such as size of test set, size of initial labeled pool, query-oriented model, task-oriented model, etc.
+
+```shell
+cd src; python main.py
+```
+
 ## Requriements
 
 - Ubuntu >= 20.04.3 LTS (focal)
@@ -41,15 +69,41 @@ We reproduce and re-benchmark the previous work: [#SV74 A Comparative Survey: Be
 
 You CANNOT obtain the results of Variability Reduction (VR) for the benchmark.
 
-## Quick Start
+## Reproduce all experiments for [Re-benchmarking Pool-Based Active Learning for Binary Classification](https://arxiv.org/abs/2306.08954)
 
-1. Run an experiment by yourself.
+### List of current settings
 
-```shell
-cd src; python main.py -h  # see help function
-```
+1. Settings of initial pools
+    - Size of test set (`--tst_size=0.4`): $40\%$
+    - Size of initial labeled pool (`--init_lbl_size=20`): $20$.
+    - Construction of initial labeled pool (`--exp_name="RS"`): random split training set (not test set) into labeled and unlabeled pools.
+    - Data preprocessing (`--exp_names="scale"`): apply `scaler = StandardScaler()` to dataset.
+2. List of query strategies, their corresponding query-oriented model, and task-oriented model.
+	- task-oriented model $\mathcal{G}$: SVM(RBF)
 
-2. Reproduce all results in Zhan et al. (Warning! It will take you a very long time!)
+| QS       | query-oriented model                                                      |
+|----------|---------------------------------------------------------------------------|
+| US-C     | SVM(RBF)                                                                  |
+| US-NC    | LR(C=0.1)                                                                 |
+| QBC      | LR(C=1); SVM(Linear, probability=True); SVM(RBF, probability=True); LDA   |
+| VR       | LR(C=1)                                                                   |
+| EER      | SVM(RBF, probability=True)                                                |
+| Core-Set | N/A                                                                       |
+| Graph    | N/A                                                                       |
+| Hier     | N/A                                                                       |
+| HintSVM  | SVM(RBF)                                                                  |
+| QUIRE    | SVM(RBF)                                                                  |
+| DWUS     | SVM(RBF)                                                                  |
+| InfoDiv  | SVM(RBF)                                                                  |
+| MCM      | SVM(RBF)                                                                  |
+| BMDR     | SVM(RBF)                                                                  |
+| SPAL     | SVM(RBF)                                                                  |
+| ALBL     | # Combination of QSs with same query-oriented model: US-C; US-NC; HintSVM |
+| LAL      | SVM(RBF)                                                                  |
+
+### Step-by-Step tutorial
+
+1. Reproduce all results in Zhan et al. (Warning! It will take you a very long time!)
 
 ```shell
 cd src;
@@ -63,7 +117,7 @@ bash run-reproduce-infeasible.sh  # run all infeasible time datasets, only for t
 - `N_JOBS`: number of workers. Users can accelerate according to their number of CPUs.
   **WARNING!** Some methods could be slower because of insufficient resources.
 
-3. Reproduce all figures and tables in this work.
+2. Reproduce all figures and tables in this work.
 
 ```shell
 cd results; gdown 1qzezDD_fe43ctNBHC4H5W0w6skJcBlxB -O aubc.zip;
@@ -99,4 +153,4 @@ If you use our code in your research or applications, please consider citing our
 ```
 
 ## Contact
-If you have any further questions or want to discuss Active Learning with me, please contact Po-Yi (Poy) Lu <ariapoy@gmail.com>/<d09944015@csie.ntu.edu.tw>.
+If you have any further questions or want to discuss Active Learning with me, please leave issues or contact Po-Yi (Poy) Lu <ariapoy@gmail.com>/<d09944015@csie.ntu.edu.tw>.
