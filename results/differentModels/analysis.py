@@ -5,7 +5,8 @@ import matplotlib
 
 query_models = ['LR', 'RBFSVM', 'RandomForest']
 task_models = ['LR', 'RBFSVM', 'RandomForest']
-datasets = ['sonar', 'ionosphere', 'gcloudb', 'checkerboard', 'banana', 'haberman', 'tic', 'appendicitis', 'breast', 'twonorm']
+# datasets = ['sonar', 'ionosphere', 'gcloudb', 'checkerboard', 'banana', 'haberman', 'tic', 'appendicitis', 'breast', 'twonorm']
+datasets = ["appendicitis", "sonar", "parkinsons", "ex8b", "heart", "haberman", "ionosphere", "clean1", "breast", "wdbc", "australian", "diabetes", "mammographic", "ex8a", "tic", "german", "splice", "gcloudb", "gcloudub", "checkerboard", "spambase", "banana", "phoneme", "ringnorm", "twonorm", "phishing"]
 aubc_avg_3x3 = {}
 aubc_std_3x3 = {}
 for data in datasets:
@@ -120,5 +121,5 @@ for data in aubc_avg_3x3:
     export_name = f'diffmodels-{data}'
     fig.tight_layout()
     # plt.savefig(f'../../Poy2023a/images/{export_name}.eps', bbox_inches='tight', format='eps', dpi=200)
-    plt.savefig(f'../../Poy2023a/images/{export_name}.png', bbox_inches='tight')
+    plt.savefig(f'images/{export_name}.png', bbox_inches='tight')
     plt.clf()
