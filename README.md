@@ -16,13 +16,17 @@ We reproduce and re-benchmark the previous work: [#SV74 A Comparative Survey: Be
 
 We call for the community to further provide more experimental results to this benchmark.
 We provide below suggested future work:
-1. Tasks and domains
+
+1. Models for tabular datasets
+    - Random Forest
+    - Gradient Boosting Tree
+2. Tasks and domains
     - multi-class classifications
     - regression problems
     - image classifications
     - object detection
     - natural language processing
-2. Evaluation metrics
+4. Evaluation metrics
     - Deficiency score, Data Utilization Rate, Start Quality, and Average End Quality
 
 ### How to start?
