@@ -19,7 +19,7 @@ We provide below suggested future work:
 
 1. Models for tabular datasets
     - Random Forest
-    - Gradient Boosting Tree
+    - Gradient Boosting Decision Trees
 2. Tasks and domains
     - multi-class classifications
     - regression problems
