@@ -76,6 +76,24 @@ python main.py -h  # call helper functions
 
 You CANNOT obtain the results of Variability Reduction (VR) for the benchmark.
 
+## Step-by-Step tutorial
+
+Bellowing examples demonstrate how to use the benchmark for quick use, evaluating existing AL query strategies on your own datasets, and adding new AL query strategies for evaluating.
+
+### Running AL experiments
+
+This is an example of running compatible uncertainty sampling (US-C) on *Haberman* dataset based on RBF kernel SVM.
+
+`python main.py --tool google --qs_name margin-zhan --hs_name google-zhan --gs_name zhan --seed 0 --n_trials 1 --data_set haberman;`
+
+### Evaluation (WIP)
+
+TODO. Split evaluation part from *main.py*
+
+### Customize datasets (WIP)
+
+### Customize query strategies (WIP)
+
 ## Reproduce all experiments for [Re-benchmarking Pool-Based Active Learning for Binary Classification](https://arxiv.org/abs/2306.08954)
 
 ### List of current settings
@@ -108,7 +126,7 @@ You CANNOT obtain the results of Variability Reduction (VR) for the benchmark.
 | ALBL     | # Combination of QSs with same query-oriented model: US-C; US-NC; HintSVM |
 | LAL      | SVM(RBF)                                                                  |
 
-### Step-by-Step tutorial
+### Steps of reproducing
 
 1. Reproduce all results in Zhan et al. (Warning! It will take you a very long time!)
 
