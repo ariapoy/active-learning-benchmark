@@ -41,7 +41,7 @@ We provide below suggested future work:
 ```shell
 cd data; bash get_data.sh  # download datasets
 cd ..;
-cd src; python main.py  # run experiments
+cd src; python main.py  # run experiments, you will see two CSV files. *-aubc.csv* and *-detail.csv*
 python main.py -h  # call helper functions
 ```
 
