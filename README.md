@@ -66,7 +66,11 @@ Note. We only verify the installation steps on Ubuntu. Please raise the issue if
 
 **Warning!** If you use Python == 3.11
 
-3. `pip install -r requirements-3.11.txt`
+3\. `pip install -r requirements-3.11.txt`
+
+6\. `git clone https://github.com/ariapoy/libact.git libact-dev; cd libact-dev; LIBACT_BUILD_VARIANCE_REDUCTION=0 LIBACT_BUILD_HINTSVM=0 python setup.py build; LIBACT_BUILD_VARIANCE_REDUCTION=0 LIBACT_BUILD_HINTSVM=0  python setup.py install; cd ..; cp -r libact-dev/libact libact-dev/libact_dev`
+
+You CANNOT obtain the results of Hinted Support Vector Machine (HintSVM) and Variability Reduction (VR) for the benchmark.
 
 **Warning!** If you use Python >= 3.10
 
