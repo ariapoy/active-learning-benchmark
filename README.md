@@ -78,6 +78,12 @@ Note. We only verify the installation steps on Ubuntu. Please raise the issue if
 
 You CANNOT obtain the results of Variability Reduction (VR) for the benchmark.
 
+**Warning!** If your OS is macOS.
+
+0\. `brew install cmake`
+
+3\. `pip install -r requirements-macos.txt`
+
 ## Step-by-Step tutorial
 
 Bellowing examples demonstrate how to use the benchmark for quick use, evaluating existing AL query strategies on your own datasets, and adding new AL query strategies for evaluating.
