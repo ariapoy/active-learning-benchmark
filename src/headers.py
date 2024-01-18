@@ -4,6 +4,7 @@ import pandas as pd
 
 from sklearn.datasets import load_svmlight_file
 from sklearn.preprocessing import StandardScaler
+from sklearn.ensemble import BaggingClassifier
 
 from joblib import Parallel, delayed, parallel_backend
 from multiprocessing import Pool

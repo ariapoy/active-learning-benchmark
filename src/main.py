@@ -325,7 +325,7 @@ def exp_compute(seed, data_set, qs_name, hs_name, tst_size, init_lbl_size, modul
 
         # Run active learning algorithm
         results = skactiveml_al(X_trn, y_lbl_skal, X_tst, y_tst, y_trn, qs, model_select_scikital, model_score, quota, seed=seed, configs=args,
-                                y_all=y, idx_trn=idx_trn)
+                                y_all=y, idx_trn=idx_trn, qs_name=qs_name)
 
     return seed, results, range(quota)
 
@@ -335,7 +335,7 @@ def parse_args():
     # query strategy
     parser.add_argument('--qs_name', dest="qs_name",
                         help='Name of query strategy',
-                        default="us-zhan", type=str)
+                        default="skactiveml_bald", type=str)
     # query strategy--bso
     parser.add_argument('--lookDtst', dest='lookDtst',
                         help='type of bso',
@@ -374,7 +374,7 @@ def parse_args():
     # module
     parser.add_argument('--tool', dest='tool',
                         help='Package name',
-                        default="libact", type=str)
+                        default="scikital", type=str)
 
     args = parser.parse_args()
     return args
