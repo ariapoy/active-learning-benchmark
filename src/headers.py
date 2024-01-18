@@ -57,3 +57,8 @@ from alipy_dev.query_strategy import QueryExpectedErrorReduction, QueryInstanceB
 from alipy_dev.query_strategy import QueryInstanceRandom, QueryInstanceUncertainty, QueryInstanceQBC
 from alipy_dev.experiment import State
 from alipy_dev.utils.multi_thread import aceThreading
+
+# For scikit-activeml
+from skactiveml.utils import MISSING_LABEL, labeled_indices, unlabeled_indices
+from skactiveml.classifier import SklearnClassifier
+from skactiveml.pool import RandomSampling, UncertaintySampling, BatchBALD, EpistemicUncertaintySampling, QueryByCommittee, Quire

@@ -8,6 +8,7 @@ from algo.bso import BSO, bso_al
 from algo.alipy import alipy_al_exps, alipy_al, alipy_al_getres
 from algo.google import select_batch, google_al
 from algo.libact import libact_al, AUBC_Zhan
+from algo.skactiveml import skactiveml_al
 
 def exp_compute(seed, data_set, qs_name, hs_name, tst_size, init_lbl_size, module="google", **kwargs):
     data = load_svmlight_file(
@@ -304,6 +305,28 @@ def exp_compute(seed, data_set, qs_name, hs_name, tst_size, init_lbl_size, modul
                          model_score, num_beam=num_beam, method=kwargs.get('lookDtst'),
                          seed=seed, configs=args)
 
+    elif module == "scikital":
+        # Dataset
+        y_lbl_skal = np.full(shape=y.shape, fill_value=MISSING_LABEL)
+        y_lbl_skal[idx_lbl] = y[idx_lbl]
+        y_lbl_skal = y_lbl_skal[idx_trn]
+
+        # query-oriented model and task-oriented model
+        if model_select is None:
+            model_select = copy.deepcopy(model_score)
+
+        model_select_scikital = SklearnClassifier(model_select, classes=np.unique(y_trn))
+
+        # query strategy
+        qs = qs_dict["qs"](**qs_dict["params"])
+
+        # labeler
+        # y_trn
+
+        # Run active learning algorithm
+        results = skactiveml_al(X_trn, y_lbl_skal, X_tst, y_tst, y_trn, qs, model_select_scikital, model_score, quota, seed=seed, configs=args,
+                                y_all=y, idx_trn=idx_trn)
+
     return seed, results, range(quota)
 
 def parse_args():
@@ -320,10 +343,10 @@ def parse_args():
     # hypothesis set/ models
     parser.add_argument('--hs_name', dest="hs_name",
                         help='Name of query model/hypothesis set',
-                        default="us-zhan", type=str)
+                        default="RandomForest", type=str)
     parser.add_argument('--gs_name', dest="gs_name",
                         help='Name of task model/hypothesis set',
-                        default="zhan", type=str)
+                        default="RandomForest", type=str)
     # exps
     parser.add_argument('--seed', dest='seed',
                         help='Random state seed for reproducing',
