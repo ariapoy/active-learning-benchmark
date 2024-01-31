@@ -10,6 +10,7 @@ numpy
 pandas
 Pillow
 requests
+scikit-activeml
 scikit-learn
 scipy
 seaborn
