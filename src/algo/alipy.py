@@ -18,7 +18,9 @@ def alipy_al(round, train_id, test_id, Lcollection, Ucollection, saver, examples
     seed = kwargs['seed']
     # file = open(f'{configs.data_set}-{configs.qs_name}-{configs.hs_name}-{configs.gs_name}-{configs.exp_name}-detail.csv', 'a')
     # quota
-    quota = len(Ucollection)
+    quota = kwargs['configs'].total_budget
+    if quota is None:
+        quota = len(Ucollection)
     al_round = len(Lcollection.index)  # num init labelled pool
 
     # Initialize the model by D_l
@@ -77,7 +79,7 @@ def alipy_al(round, train_id, test_id, Lcollection, Ucollection, saver, examples
         saver.add_state(st)
 
         # update round
-        quota = len(Ucollection)
+        quota -= 1  # TODO query batch = 1
 
     # file.close()
     return st

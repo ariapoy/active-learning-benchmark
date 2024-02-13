@@ -19,8 +19,6 @@ def exp_compute(seed, data_set, qs_name, hs_name, tst_size, init_lbl_size, modul
         y[y==0] = -1  # bug for hintsvm, dwus?
 
     # initial setttings
-    # total budget
-    quota = None
     # training and testing sets
     idx = np.arange(X.shape[0])
     trn_size = int(idx.shape[0]*(1 - tst_size))
@@ -107,7 +105,11 @@ def exp_compute(seed, data_set, qs_name, hs_name, tst_size, init_lbl_size, modul
     X_lbl, y_lbl = X[idx_lbl, :], y[idx_lbl]
 
     # Quota (Budget)
-    quota = ubl_len = idx_ubl.shape[0]
+    if args.total_budget and idx_ubl.shape[0]>args.total_budget:
+        quota = ubl_len = args.total_budget
+    else:
+        print('Use the size of unlabeled as the total budget.')
+        quota = ubl_len = idx_ubl.shape[0]
 
     # Make sure each class with at least one sample
     try:
@@ -335,7 +337,7 @@ def parse_args():
     # query strategy
     parser.add_argument('--qs_name', dest="qs_name",
                         help='Name of query strategy',
-                        default="skactiveml_bald", type=str)
+                        default="us-zhan", type=str)
     # query strategy--bso
     parser.add_argument('--lookDtst', dest='lookDtst',
                         help='type of bso',
@@ -374,7 +376,11 @@ def parse_args():
     # module
     parser.add_argument('--tool', dest='tool',
                         help='Package name',
-                        default="scikital", type=str)
+                        default="libact", type=str)
+
+    parser.add_argument('--total_budget', dest="total_budget",
+                        help='Budget of quota',
+                        default=None, type=int)
 
     args = parser.parse_args()
     return args
@@ -417,21 +423,23 @@ if __name__ == '__main__':
 
     start_time = time.time()
     # alipy needs multiprocessing
-    if tool_name == "alipy" or "quire" in qs_name:
+    if n_jobs == 1:
         res_list = []
-        if n_jobs == 1:
-            for seed in tqdm(expno_range):
-                res_list.append(run(seed))
-        else:
+        for seed in tqdm(expno_range):
+            res_list.append(run(seed))
+
+    else:
+        if tool_name == "alipy" or "quire" in qs_name:
+            res_list = []
             with Pool(n_jobs) as p:
                 imap_unordered_it = p.imap_unordered(run, expno_range)
                 for res in imap_unordered_it:
                     res_list.append(res)
-    else:
-        # reference: https://joblib.readthedocs.io/en/latest/parallel.html#avoiding-over-subscription-of-cpu-ressources
-        with parallel_backend('loky', inner_max_num_threads=5):
-            res_list = Parallel(n_jobs=n_jobs)(delayed(run)(seed)
-                                               for seed in tqdm(expno_range))
+        else:
+            # reference: https://joblib.readthedocs.io/en/latest/parallel.html#avoiding-over-subscription-of-cpu-ressources
+            with parallel_backend('loky', inner_max_num_threads=5):
+                res_list = Parallel(n_jobs=n_jobs)(delayed(run)(seed)
+                                                   for seed in tqdm(expno_range))
 
     res_dict = {
         "res_expno": [],
