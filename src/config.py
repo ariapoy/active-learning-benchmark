@@ -166,5 +166,9 @@ def QueryStrategyBuilder(name):
         return { "qs": libact_VR, "params": {"model": None, "sigma": 100.0, "optimality": "trace", "n_jobs": 1}, }
     if name == 'kcenter-zhan':
         return { "qs": libactKCG, "params": {"seed": 1126, "metric": 'euclidean'} }
+    if name == 'skactiveml_margin':
+        return { 'qs': UncertaintySampling, 'params': {'method': 'margin_sampling', 'random_state': 1126} }
+    if name == 'skactiveml_bald':
+        return { 'qs': BatchBALD, 'params': {'random_state': 1126} }
 
     raise NotImplementedError
