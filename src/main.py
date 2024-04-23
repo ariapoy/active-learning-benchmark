@@ -17,6 +17,9 @@ def exp_compute(seed, data_set, qs_name, hs_name, tst_size, init_lbl_size, modul
     X = np.asarray(X.todense())
     if -1 not in set(y):
         y[y==0] = -1  # bug for hintsvm, dwus?
+    if hs_name == 'XGBoost':
+        y[y==-1] = 0  # Expected: [0 1] for XGBoost
+        # TODO address a conflict between XGBoost and hintsvm/dwus
 
     # initial setttings
     # training and testing sets

@@ -2,6 +2,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
 from sklearn.ensemble import RandomForestClassifier
+import xgboost as xgb
 
 from headers import *
 
@@ -47,7 +48,16 @@ def _RandomForest(**kwargs):
 
     return RandomForestClassifier(**kwargs)
 
+def _XGBoostClassifier(**kwargs):
+    default_config = {
+        'early_stopping_rounds': 2,
+    }
+    default_config.update(**kwargs)
+    return xgb.XGBClassifier(**kwargs)
+
 def SelectModelBuilder(name):
+    if name == 'XGBoost':
+        return _XGBoostClassifier()
     if name == 'RandomForest':
         return _RandomForest()
     if name == 'RBFSVM':
@@ -83,6 +93,8 @@ def SelectModelBuilder(name):
     raise NotImplementedError
 
 def ScoreModelBuilder(name):
+    if name == 'XGBoost':
+        return _XGBoostClassifier()
     if name == 'RandomForest':
         return _RandomForest()
     if name == 'RBFSVMProb':
