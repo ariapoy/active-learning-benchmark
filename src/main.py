@@ -348,10 +348,10 @@ def parse_args():
     # hypothesis set/ models
     parser.add_argument('--hs_name', dest="hs_name",
                         help='Name of query model/hypothesis set',
-                        default="RandomForest", type=str)
+                        default="XGBoost", type=str)
     parser.add_argument('--gs_name', dest="gs_name",
                         help='Name of task model/hypothesis set',
-                        default="RandomForest", type=str)
+                        default="XGBoost", type=str)
     # exps
     parser.add_argument('--seed', dest='seed',
                         help='Random state seed for reproducing',

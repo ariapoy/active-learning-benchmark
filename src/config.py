@@ -32,7 +32,7 @@ def _LDABuilder(**kwargs):
         'solver': 'svd', 'shrinkage': None, 'priors': None, 'n_components': None, 
         'store_covariance': False, 'tol': 0.0001, 'covariance_estimator': None
     }
-    default_config.update(**kwargs)
+    default_config.update(**default_config)
 
     return LDA(**kwargs)
 
@@ -46,14 +46,14 @@ def _RandomForest(**kwargs):
     }
     default_config.update(**kwargs)
 
-    return RandomForestClassifier(**kwargs)
+    return RandomForestClassifier(**default_config)
 
 def _XGBoostClassifier(**kwargs):
     default_config = {
-        'early_stopping_rounds': 2,
+        'n_estimators': 100,
     }
     default_config.update(**kwargs)
-    return xgb.XGBClassifier(**kwargs)
+    return xgb.XGBClassifier(**default_config)
 
 def SelectModelBuilder(name):
     if name == 'XGBoost':
