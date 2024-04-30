@@ -28,3 +28,5 @@ gdown
 ipykernel
 tabulate
 statsmodels
+xgboost==2.0.3
+scikit-activeml==0.4.1
