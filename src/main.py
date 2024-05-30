@@ -113,6 +113,8 @@ def exp_compute(seed, data_set, qs_name, hs_name, tst_size, init_lbl_size, modul
     else:
         print('Use the size of unlabeled as the total budget.')
         quota = ubl_len = idx_ubl.shape[0]
+        # TODO. put all arguments to args
+        args.total_budget = quota
 
     # Make sure each class with at least one sample
     try:
