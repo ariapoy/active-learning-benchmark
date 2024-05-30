@@ -182,5 +182,7 @@ def QueryStrategyBuilder(name):
         return { 'qs': UncertaintySampling, 'params': {'method': 'margin_sampling', 'random_state': 1126} }
     if name == 'skactiveml_bald':
         return { 'qs': BatchBALD, 'params': {'random_state': 1126} }
+    if name == 'skactiveml_eer':
+        return { 'qs': MonteCarloEER, 'params': {'random_state': 1126} }
 
     raise NotImplementedError
