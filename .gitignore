@@ -144,3 +144,9 @@ results/lc-heart.png
 results/table6-super.tex
 Poy2022a
 tmp/
+
+*.npz
+*.pkl
+
+data/data/*
+data/mycache/*
