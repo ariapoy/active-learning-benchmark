@@ -2,106 +2,35 @@ import traceback
 import argparse
 from headers import *
 from utils import *
+from sklearn.preprocessing import LabelEncoder
 from config import SelectModelBuilder, ScoreModelBuilder, QueryStrategyBuilder
 
 from algo.bso import BSO, bso_al
 from algo.alipy import alipy_al_exps, alipy_al, alipy_al_getres
 from algo.google import select_batch, google_al
-from algo.libact import libact_al, AUBC_Zhan
+from algo.libact import libact_al, AUBC
 from algo.skactiveml import skactiveml_al
 
-def exp_compute(seed, data_set, qs_name, hs_name, tst_size, init_lbl_size, module="google", **kwargs):
+def exp_compute(seed, data_set, qs_name, hs_name, tst_ratio, init_lbl_size, module="google", **kwargs):
     data = load_svmlight_file(
         "../data/dataset_used_in_ALSurvey/{0}-svmstyle.txt".format(data_set))
     X, y = data[0], data[1]
     X = np.asarray(X.todense())
-    if -1 not in set(y):
-        y[y==0] = -1  # bug for hintsvm, dwus?
-    if hs_name == 'XGBoost':
-        y[y==-1] = 0  # Expected: [0 1] for XGBoost
-        # TODO address a conflict between XGBoost and hintsvm/dwus
+    if np.unique(y).shape[0] == 2:  # binary class
+        if -1 not in set(y):
+            y[y==0] = -1  # bug for hintsvm, dwus?
+        if hs_name == 'XGBoost':
+            # mapping y to [0, 1, 2, ...]
+            y = LabelEncoder().fit_transform(y)
+            # TODO address a conflict between XGBoost and hintsvm/dwus
+    else:  # multi-class
+        if hs_name == 'XGBoost':
+            # mapping y to [0, 1, 2, ...]
+            y = LabelEncoder().fit_transform(y)
 
     # initial setttings
     # training and testing sets
-    idx = np.arange(X.shape[0])
-    trn_size = int(idx.shape[0]*(1 - tst_size))
-    tst_size = idx.shape[0] - trn_size
-    if '_' in args.exp_name:
-        init_trn_tst = args.exp_name.split('_')[0]  # '{RS, SameDist}_{fix, noFix}'
-        init_trn_tst_fixSeed = args.exp_name.split('_')[1]
-    else:
-        init_trn_tst = 'SameDist'
-        init_trn_tst_fixSeed = True
-
-    init_trn_tst = init_trn_tst if init_trn_tst in {'RS', 'SameDist'} else 'SameDist'
-    init_trn_tst_fixSeed = not ('noFix' == init_trn_tst_fixSeed)  # True
-
-    if init_trn_tst_fixSeed:
-        rng_trntst = np.random.default_rng(0)
-        rng_trntst.shuffle(idx)
-    else:
-        # print('D_tst is not fix')
-        rng_trntst = np.random.default_rng(seed)
-        rng_trntst.shuffle(idx)
-
-    if init_trn_tst == 'RS':  # random splitting of training and testing sets
-        # print('D_trn is RS')
-        # fix "index" of datasets.
-        # shuffle the index, split by this new order
-        # get size of train, if tst_size in [0, 1]
-        # get the training and testing
-        idx_trn = idx[:trn_size]
-        idx_tst = idx[trn_size:]
-    elif init_trn_tst == 'SameDist':
-        # TODO maybe update idx after shuffle
-        idx_n, idx_p = idx[y[idx]==-1], idx[y[idx]==1]
-        ratio_n = idx_n.shape[0]/(idx_n.shape[0] + idx_p.shape[0])
-        ratio_p = 1 - ratio_n
-        size_n_tst, size_p_tst = int(round(tst_size*ratio_n)), int(round(tst_size*ratio_p))
-        rng_trntst.shuffle(idx_n)
-        rng_trntst.shuffle(idx_p)
-        idx_tst = np.append(idx_n[:size_n_tst], idx_p[:size_p_tst])
-        idx_trn = np.setdiff1d(idx, idx_tst)
-        rng_trntst.shuffle(idx_trn)
-
-    rng_trntst = np.random.default_rng(seed)
-    # Get X_trn, X_tst, X_lbl, X_ubl ; y_trn, y_tst, y_lbl, y_ubl
-    X_trn, y_trn = X[idx_trn, :], y[idx_trn]
-    # labelled and unlabelled pools
-    init_lbl_ubl = args.exp_name  # 'RS', 'SameDist', 'nShot'
-    if 'nShot' in init_lbl_ubl:
-        idx_n, idx_p = idx_trn[y_trn==-1], idx_trn[y_trn==1]
-        ratio_n = 1/2
-        ratio_p = 1 - ratio_n
-        size_n, size_p = int(round(init_lbl_size*ratio_n)), int(round(init_lbl_size*ratio_p))
-        if size_n != size_p:
-            size_n = min(size_n, size_p)
-            size_p = size_n
-        rng_trntst.shuffle(idx_n)
-        rng_trntst.shuffle(idx_p)
-        idx_lbl = np.append(idx_n[:size_n], idx_p[:size_p])
-        rng_trntst.shuffle(idx_lbl)
-        idx_ubl = np.setdiff1d(idx_trn, idx_lbl)
-        idx_trn = np.append(idx_lbl, idx_ubl)
-    elif 'SameDist' in init_lbl_ubl:
-        # TODO. SameDist can be the function
-        idx_n, idx_p = idx_trn[y_trn==-1], idx_trn[y_trn==1]
-        ratio_n = idx_n.shape[0]/(idx_n.shape[0] + idx_p.shape[0])
-        ratio_p = 1 - ratio_n
-        size_n, size_p = int(round(init_lbl_size*ratio_n)), int(round(init_lbl_size*ratio_p))
-        rng_trntst.shuffle(idx_n)
-        rng_trntst.shuffle(idx_p)
-        idx_lbl = np.append(idx_n[:size_n], idx_p[:size_p])
-        rng_trntst.shuffle(idx_lbl)
-        idx_ubl = np.setdiff1d(idx_trn, idx_lbl)
-        idx_trn = np.append(idx_lbl, idx_ubl)
-    else:  # if init_lbl_ubl == 'RS':
-        # print('D_l is RS')
-        rng_trntst.shuffle(idx_trn)
-        idx_lbl = idx_trn[:init_lbl_size]
-        idx_ubl = idx_trn[init_lbl_size:]
-
-    assert (idx_lbl == idx_trn[:idx_lbl.shape[0]]).all(), 'inconsistent of idx_lbl and idx_trn'
+    idx, idx_trn, idx_tst, idx_lbl, idx_ubl = init_data_exps(X, y, seed, init_lbl_size, tst_ratio, init_trn_tst='RS', init_trn_tst_fixSeed='noFix', init_lbl_ubl='RS')
     # Get X_trn, X_tst, X_lbl, X_ubl ; y_trn, y_tst, y_lbl, y_ubl
     X_trn, y_trn = X[idx_trn, :], y[idx_trn]
     X_tst, y_tst = X[idx_tst, :], y[idx_tst]
@@ -117,35 +46,29 @@ def exp_compute(seed, data_set, qs_name, hs_name, tst_size, init_lbl_size, modul
         args.total_budget = quota
 
     # Make sure each class with at least one sample
-    try:
-        y_class, y_cnt = np.unique(y, return_counts=True)
-        y_trn_class, y_trn_cnt = np.unique(y_trn, return_counts=True)
-        y_lbl_class, y_lbl_cnt = np.unique(y_lbl, return_counts=True)
-        assert len(y_class) == len(y_trn_class) == len(y_lbl_class)
-        assert (y_trn_cnt >= 1).all()
-        assert (y_lbl_cnt >= 1).all()
-    except:
-        if len(y_trn_class) != len(y_class):
-            results = "Not enough label in training set"
-        elif len(y_lbl_class) != len(y_class):
-            results = "Not enough label in label pool"
-        elif (y_trn_cnt < 1).any():
-            idx_class = np.where(y_trn_cnt < 1)
-            res_class = y_trn_class[idx_class]
-            results = "Not enough label of class {0} in traininig set".format(
-                res_class)
-        elif (y_lbl_cnt < 1).any():
-            idx_class = np.where(y_lbl_cnt < 1)
-            res_class = y_lbl_class[idx_class]
-            results = "Not enough label of class {0} in label pool".format(
-                res_class)
-
-        logging_print('data', f'|{results}|||||', level='error')
+    y_class, y_cnt = np.unique(y, return_counts=True)
+    y_trn_class, y_trn_cnt = np.unique(y_trn, return_counts=True)
+    y_lbl_class, y_lbl_cnt = np.unique(y_lbl, return_counts=True)
+    if len(y_trn_class) != len(y_class):
+        results = "Not enough label in training set"
+        return seed, results, range(quota)
+    elif len(y_lbl_class) != len(y_class):
+        results = "Not enough label in label pool"
+        return seed, results, range(quota)
+    elif (y_trn_cnt < 1).any():
+        idx_class = np.where(y_trn_cnt < 1)
+        res_class = y_trn_class[idx_class]
+        results = "Not enough label of class {0} in traininig set".format(
+            res_class)
+        return seed, results, range(quota)
+    elif (y_lbl_cnt < 1).any():
+        idx_class = np.where(y_lbl_cnt < 1)
+        res_class = y_lbl_class[idx_class]
+        results = "Not enough label of class {0} in label pool".format(
+            res_class)
         return seed, results, range(quota)
 
-    # Add Zhan's data preprocessing (personal message)
-    if "scale" in args.exp_name:
-        # print('scale')
+    if args.scale:
         scaler = StandardScaler()
         X_trn = scaler.fit_transform(X_trn)
         X = scaler.transform(X)
@@ -224,13 +147,12 @@ def exp_compute(seed, data_set, qs_name, hs_name, tst_size, init_lbl_size, modul
         lbr = IdealLabeler(fully_labeled_trn_ds)
 
         # Run active learning algorithm
-        try:
-            results = libact_al(trn_ds, tst_ds, fully_labeled_trn_ds,
-                                qs, model_select_libact, model_score, quota, lbr, seed=seed, configs=args,
-                                idxs=[idx, idx_trn, idx_tst, idx_lbl])
-        except Exception as e:
-            results = traceback.format_exc()
-            logging_print('framework libact', f'|Error by {results}|||||', level='error')
+        results = libact_al(trn_ds, tst_ds, fully_labeled_trn_ds,
+                            qs, model_select_libact, model_score, quota, lbr, seed=seed, configs=args,
+                            idxs=[idx, idx_trn, idx_tst, idx_lbl])
+        # except Exception as e:
+        #     results = traceback.format_exc()
+        #     logging_print('framework libact', f'|Error by {results}|||||', level='error')
 
     elif module == "google":
         ubl_len = idx_ubl.shape[0]
@@ -250,13 +172,12 @@ def exp_compute(seed, data_set, qs_name, hs_name, tst_size, init_lbl_size, modul
         # pass
 
         # Run active learning algorithm
-        try:
-            results = google_al(X_trn, y_trn, X_tst, y_tst, idx_lbl,
-                                qs, uniform_qs, model_select, model_score, quota, batch_size=1,
-                                X_all=X, y_all=y, indices=idx_trn, seed=seed, configs=args)
-        except Exception as e:
-            logging_print('framework', f'|Error by {e}|||||', level='error')
-            results = e
+        results = google_al(X_trn, y_trn, X_tst, y_tst, idx_lbl,
+                            qs, uniform_qs, model_select, model_score, quota, batch_size=1,
+                            X_all=X, y_all=y, indices=idx_trn, seed=seed, configs=args)
+        # except Exception as e:
+        #     logging_print('framework', f'|Error by {e}|||||', level='error')
+        #     results = e
 
     elif module == "alipy":
         # alipy.Dataset
@@ -283,25 +204,24 @@ def exp_compute(seed, data_set, qs_name, hs_name, tst_size, init_lbl_size, modul
         # alipy.labeler
         # pass
 
-        try:
-            acethread = aceThreading(examples=X, labels=y,
-                                     train_idx=alipy_trn, test_idx=alipy_tst,
-                                     label_index=alipy_lbl, unlabel_index=alipy_ubl,
-                                     max_thread=None, refresh_interval=1*60*60,
-                                     saving_path='./alipy-log/')
-            acethread.set_target_function(alipy_al_exps(
-                qs, model_select, model_score, select_params=qs_select_params, seed=seed, configs=args))
-            acethread.start_all_threads(global_parameters=None)
-            # get results of exps
-            stateIO_list = acethread.get_results()
-            res = stateIO_list[0]
-            results = alipy_al_getres(res)
-            # save the state of multi_thread to the saving_path in pkl form
-            acethread.save()
-            del acethread
-        except Exception as e:
-            results = e
-            logging_print('framework', f'|Error by {e}|||||', level='error')
+        acethread = aceThreading(examples=X, labels=y,
+                                 train_idx=alipy_trn, test_idx=alipy_tst,
+                                 label_index=alipy_lbl, unlabel_index=alipy_ubl,
+                                 max_thread=None, refresh_interval=1*60*60,
+                                 saving_path='./alipy-log/')
+        acethread.set_target_function(alipy_al_exps(
+            qs, model_select, model_score, select_params=qs_select_params, seed=seed, configs=args))
+        acethread.start_all_threads(global_parameters=None)
+        # get results of exps
+        stateIO_list = acethread.get_results()
+        res = stateIO_list[0]
+        results = alipy_al_getres(res)
+        # save the state of multi_thread to the saving_path in pkl form
+        acethread.save()
+        del acethread
+        # except Exception as e:
+        #     results = e
+        #     logging_print('framework', f'|Error by {e}|||||', level='error')
 
     elif module == "bso":
         if model_select is None:
@@ -386,6 +306,8 @@ def parse_args():
     parser.add_argument('--total_budget', dest="total_budget",
                         help='Budget of quota',
                         default=None, type=int)
+    parser.add_argument('--scale', action='store_true',
+                        help='Scale the data or not, we use StandardScaler')
 
     args = parser.parse_args()
     return args
@@ -453,17 +375,15 @@ if __name__ == '__main__':
     }
     error_log = {}
     learn_curve = {}
-    confusion_mats = {}
     update_tst_acc = {}
     for expno, res, budget in res_list:
         if isinstance(res, dict):
-            E_lbl_score_curr = AUBC_Zhan(budget, res["E_lbl_score"])
-            E_tst_score_curr = AUBC_Zhan(budget, res["E_tst_score"])
+            E_lbl_score_curr = AUBC(budget, res["E_lbl_score"])
+            E_tst_score_curr = AUBC(budget, res["E_tst_score"])
             res_dict["res_expno"].append(expno)
             res_dict["res_lbl_score"].append(E_lbl_score_curr)
             res_dict["res_tst_score"].append(E_tst_score_curr)
             learn_curve[expno] = [res['E_ini_score']] + res['E_tst_score']
-            confusion_mats[expno] = np.vstack([res['confusion_mat_ini']] + res['confusion_mat'])
             # update detail
             for rnd, tst in enumerate(res["E_tst_score"]):
                 rnd = rnd + init_lbl_size + 1
@@ -474,41 +394,11 @@ if __name__ == '__main__':
             else:
                 error_log[str(res)] = "{0}".format(expno)
 
-    # update detail
-    if os.path.isfile(f'{export_name}-detail.csv'):
-        logfile = pd.read_csv(f'{export_name}-detail.csv', sep='|', header=None)
-        logfile.columns = ['msg', 'seed', 'round', 'tst_acc', 'trn_time', 'qry_time', 'qry_idx']
-        logfile = logfile.dropna(subset=['seed', 'round'])
-        logfile['seed'] = logfile['seed'].astype(int)
-        logfile['round'] = logfile['round'].astype(int)
-        logfile = logfile.set_index(['seed', 'round'])
-        for key in update_tst_acc:
-            # logfile['tst_acc'] = logfile['tst_acc'].map(update_tst_acc)
-            logfile.loc[key, 'tst_acc'] = update_tst_acc[key]
-
-        logfile = logfile[~logfile.index.duplicated(keep='last')]
-        logfile = logfile.sort_index()
-        logfile = logfile.reset_index()
-        logfile = logfile[['msg', 'seed', 'round', 'tst_acc', 'trn_time', 'qry_time', 'qry_idx']]
-        logfile['msg'] = logfile['msg'].str[:11].drop_duplicates(keep='first')  # keep datetime
-        logfile.to_csv(f'{export_name}-detail.csv', sep='|', index=None, header=False)
-
     del res_list
     res = pd.DataFrame(res_dict)
     learn_curve = pd.DataFrame(learn_curve)
     learn_curve.index = [init_lbl_size] + [init_lbl_size+1+b for b in budget]
     learn_curve = learn_curve.T
-    confusion_mats = {k: pd.DataFrame(confusion_mats[k]) for k in confusion_mats}
-    confusion_mats_fin = []
-    for k in confusion_mats:
-        confusion_mats[k]['expno'] = k
-        confusion_mats[k]['round'] = [init_lbl_size] + [init_lbl_size+1+b for b in budget]
-        confusion_mats_fin.append(confusion_mats[k])
-
-    confusion_mats_fin = pd.concat(confusion_mats_fin, ignore_index=True)
-    confusion_mats_fin.columns = ['tn', 'fp', 'fn', 'tp', 'expno', 'round']
-    confusion_mats_fin = confusion_mats_fin[['expno', 'round', 'tn', 'fp', 'fn', 'tp']]
-    confusion_mats_fin = confusion_mats_fin.set_index('expno')
 
     res["res_lbl_score"].mean(), res["res_tst_score"].mean()
 
@@ -519,16 +409,17 @@ if __name__ == '__main__':
         res.columns = ['res_expno', 'res_lbl_score', 'res_tst_score']
         res = res.drop_duplicates(keep='last')
         res.to_csv(f'{export_name}-aubc.csv', index=None)
-
-        # export confusion matrix
-        # confusion_mats_fin.to_csv(f'{export_name}-CM.csv', mode="a", header=None)
-        # res = pd.read_csv(f'{export_name}-CM.csv')
-        # res.columns = ['expno', 'round', 'tn', 'fp', 'fn', 'tp']
-        # res = res.drop_duplicates(keep='last')
-        # res.to_csv(f'{export_name}-CM.csv', index=None)
     else:
         res.to_csv(f'{export_name}-aubc.csv', index=None)
-        # confusion_mats_fin.to_csv(f'{export_name}-CM.csv')
+
+    if os.path.isfile(f'{export_name}-learn_curve.csv'):
+        learn_curve.to_csv(f'{export_name}-learn_curve.csv', mode="a", header=None)
+        # drop duplicates
+        learn_curve = pd.read_csv(f'{export_name}-learn_curve.csv', index_col=0,)
+        learn_curve = learn_curve.drop_duplicates(keep='last')
+        learn_curve.to_csv(f'{export_name}-learn_curve.csv')
+    else:
+        learn_curve.to_csv(f'{export_name}-learn_curve.csv')
 
     if len(error_log) > 0:
         logging_print('algo', f'|{repr(error_log)}|||||', level='error')
