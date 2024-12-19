@@ -160,11 +160,22 @@ def QueryStrategyBuilder(name):
         return { "qs": libact_VR, "params": {"model": None, "sigma": 100.0, "optimality": "trace", "n_jobs": 1}, }
     if name == 'kcenter':
         return { "qs": libactKCG, "params": {"seed": 1126, "metric": 'euclidean'} }
+    if name == 'skal_uniform':
+        return { 'qs': skal_RS, 'params': {'random_state': 1126} }
     if name == 'skal_us_margin':
         return { 'qs': UncertaintySampling, 'params': {'method': 'margin_sampling', 'random_state': 1126} }
+    if name == 'skal_us_lc':
+        return { 'qs': UncertaintySampling, 'params': {'method': 'least_confident', 'random_state': 1126} }
+    if name == 'skal_us_ent':
+        return { 'qs': UncertaintySampling, 'params': {'method': 'entropy', 'random_state': 1126} }
+    if name == 'skal_us_eap':
+        return { 'qs': UncertaintySampling, 'params': {'method': 'expected_average_precision', 'random_state': 1126} }
     if name == 'skal_bald':
         return { 'qs': BatchBALD, 'params': {'random_state': 1126} }
+    if name == 'skal_greedbald':
+        return { 'qs': GreedyBALD, 'params': {'random_state': 1126} }
     if name == 'skal_eer':
         return { 'qs': MonteCarloEER, 'params': {'random_state': 1126} }
-
+    if name == 'skal_coreset':
+        return { 'qs': CoreSet, 'params': {'random_state': 1126} }
     raise NotImplementedError

@@ -24,9 +24,8 @@ def exp_compute(seed, data_set, qs_name, hs_name, tst_ratio, init_lbl_size, modu
             y = LabelEncoder().fit_transform(y)
             # TODO address a conflict between XGBoost and hintsvm/dwus
     else:  # multi-class
-        if hs_name == 'XGBoost':
-            # mapping y to [0, 1, 2, ...]
-            y = LabelEncoder().fit_transform(y)
+        # mapping y to [0, 1, 2, ...]
+        y = LabelEncoder().fit_transform(y)
 
     # initial setttings
     # training and testing sets
@@ -262,7 +261,7 @@ def parse_args():
     # query strategy
     parser.add_argument('--qs_name', dest="qs_name",
                         help='Name of query strategy',
-                        default="us-zhan", type=str)
+                        default="skal_uniform", type=str)
     # query strategy--bso
     parser.add_argument('--lookDtst', dest='lookDtst',
                         help='type of bso',
@@ -301,7 +300,7 @@ def parse_args():
     # module
     parser.add_argument('--tool', dest='tool',
                         help='Package name',
-                        default="libact", type=str)
+                        default="scikital", type=str)
 
     parser.add_argument('--total_budget', dest="total_budget",
                         help='Budget of quota',

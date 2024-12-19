@@ -5,6 +5,7 @@ from datasets import load_dataset
 from torchvision import transforms
 from torchvision import datasets as vision_datasets
 from tqdm import tqdm
+import numpy as np
 
 # Use GPU if available
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -48,9 +49,11 @@ def extract_embeddings(model, dataloader):
 # Extract embeddings
 embeddings_tst, labels_tst = extract_embeddings(model, dataloader_tst)
 embeddings_trn, labels_trn = extract_embeddings(model, dataloader_trn)
+print('CIFAR-10')
+print(len(np.unique(labels_tst)))
 
 # Save embeddings in LibSVM format
-with open('cifar10_svmstyle.txt', 'w') as f:
+with open('cifar10-svmstyle.txt', 'w') as f:
     for embedding, label in zip(embeddings_trn+embeddings_tst, labels_trn+labels_tst):
         features = ' '.join([f"{i+1}:{value}" for i, value in enumerate(embedding)])
         f.write(f"{label} {features}\n")
@@ -86,9 +89,11 @@ embeddings_trn = extract_embeddings(model, tokenizer, texts_trn)
 texts_tst = dataset_tst['text']
 labels_tst = dataset_tst['label']
 embeddings_tst = extract_embeddings(model, tokenizer, texts_tst)
+print('IMDB')
+print(len(np.unique(labels_tst)))
 
 # Save embeddings in LibSVM format
-with open('imdb_svmstyle.txt', 'w') as f:
+with open('imdb_svmstyle-svmstyle.txt', 'w') as f:
     for embedding, label in zip(embeddings_trn+embeddings_tst, labels_trn+labels_tst):
         features = ' '.join([f"{i+1}:{value}" for i, value in enumerate(embedding)])
         f.write(f"{label} {features}\n")

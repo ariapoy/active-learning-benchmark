@@ -61,8 +61,9 @@ Note. We only verify the installation steps on Ubuntu. Please raise the issue if
 4. `git clone https://github.com/ariapoy/active-learning.git`
 5. `git clone https://github.com/ariapoy/ALiPy.git alipy-dev; cp -r alipy-dev/alipy alipy-dev/alipy_dev`
 6. `git clone https://github.com/ariapoy/libact.git libact-dev; cd libact-dev; python setup.py build; python setup.py install; cd ..; cp -r libact-dev/libact libact-dev/libact_dev`
-7. `cd data; bash get_data_zhan21.sh; cd ..`
-8. `cd src; python main.py -h`
+7. `git clone https://github.com/ariapoy/scikit-activeml.git scikit-activeml-dev; cp -r scikit-activeml-dev/skactiveml scikit-activeml-dev/skactiveml_dev`
+8. `cd data; bash get_data_zhan21.sh; cd ..`
+9. `cd src; python main.py -h`
 
 **Warning!** If you use Python == 3.11
 
