@@ -93,7 +93,7 @@ print('IMDB')
 print(len(np.unique(labels_tst)))
 
 # Save embeddings in LibSVM format
-with open('imdb_svmstyle-svmstyle.txt', 'w') as f:
+with open('imdb-svmstyle.txt', 'w') as f:
     for embedding, label in zip(embeddings_trn+embeddings_tst, labels_trn+labels_tst):
         features = ' '.join([f"{i+1}:{value}" for i, value in enumerate(embedding)])
         f.write(f"{label} {features}\n")
