@@ -53,7 +53,7 @@ def skactiveml_al(X_trn, y_trn_lbl, X_tst, y_tst, y_trn_full,
         start_query_time = time.time()
         if qs_name == 'skal_bald':
             idx_qrd = qs.query(X=X_trn, y=y_trn_lbl, ensemble=model_select, batch_size=batch_size)
-        if qs_name in ['skal_uniform', 'skal_coreset']:
+        elif qs_name in ['skal_uniform', 'skal_coreset']:
             idx_qrd = qs.query(X=X_trn, y=y_trn_lbl, batch_size=batch_size)
         else:
             idx_qrd = qs.query(X=X_trn, y=y_trn_lbl, clf=model_select)

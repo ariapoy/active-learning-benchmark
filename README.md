@@ -65,15 +65,15 @@ Note. We only verify the installation steps on Ubuntu. Please raise the issue if
 8. `cd data; bash get_data_zhan21.sh; cd ..`
 9. `cd src; python main.py -h`
 
-**Warning!** If you use Python == 3.11
+**Warning!** If you use Python >= 3.11
 
-3\. `pip install -r requirements-3.11.txt`
+3\. `pip install -r requirements-3.12.txt`
 
-6\. `git clone https://github.com/ariapoy/libact.git libact-dev; cd libact-dev; LIBACT_BUILD_VARIANCE_REDUCTION=0 LIBACT_BUILD_HINTSVM=0 python setup.py build; LIBACT_BUILD_VARIANCE_REDUCTION=0 LIBACT_BUILD_HINTSVM=0  python setup.py install; cd ..; cp -r libact-dev/libact libact-dev/libact_dev`
+6\. `git clone https://github.com/ariapoy/libact.git libact-dev; cp -r libact-dev/libact libact-dev/libact_dev`
 
 You CANNOT obtain the results of Hinted Support Vector Machine (HintSVM) and Variability Reduction (VR) for the benchmark.
 
-**Warning!** If you use Python >= 3.10
+**Warning!** If you use Python == 3.10
 
 5. `git clone https://github.com/ariapoy/ALiPy.git alipy-dev; cd alipy-dev; git checkout py3.10; cd .. ; cp -r alipy-dev/alipy alipy-dev/alipy_dev`
 
