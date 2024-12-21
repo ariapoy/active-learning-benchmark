@@ -55,7 +55,7 @@ from alipy_dev.utils.multi_thread import aceThreading
 
 # For scikit-activeml
 sys.path.append("../scikit-activeml-dev/")
-from skactiveml.utils import MISSING_LABEL, labeled_indices, unlabeled_indices
-from skactiveml.classifier import SklearnClassifier
-from skactiveml.pool import UncertaintySampling, BatchBALD, EpistemicUncertaintySampling, QueryByCommittee, Quire, MonteCarloEER, GreedyBALD, CoreSet
-from skactiveml.pool import RandomSampling as skal_RS
+from skactiveml_dev.utils import MISSING_LABEL, labeled_indices, unlabeled_indices
+from skactiveml_dev.classifier import SklearnClassifier
+from skactiveml_dev.pool import UncertaintySampling, BatchBALD, EpistemicUncertaintySampling, QueryByCommittee, Quire, MonteCarloEER, GreedyBALD, CoreSet
+from skactiveml_dev.pool import RandomSampling as skal_RS
