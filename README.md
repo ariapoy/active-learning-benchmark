@@ -54,6 +54,8 @@ python main.py -h  # call helper functions
 
 Note. We only verify the installation steps on Ubuntu. Please raise the issue if you have any problem.
 
+When you use Python in [3.8, 3.9].
+
 0. (optional) `apt install vim git python3 python3-venv build-essential gfortran libatlas-base-dev liblapacke-dev python3-dev -y`
 1. `git clone https://github.com/ariapoy/active-learning-benchmark.git act-benchmark; cd act-benchmark`
 2. `python3 -m venv act-env; source act-env/bin/activate`
@@ -67,7 +69,7 @@ Note. We only verify the installation steps on Ubuntu. Please raise the issue if
 
 **Warning!** If you use Python >= 3.11
 
-3\. `pip install -r requirements-3.12.txt`
+3\. `pip install -r requirements-py312.txt`
 
 6\. `git clone https://github.com/ariapoy/libact.git libact-dev; cp -r libact-dev/libact libact-dev/libact_dev`
 
