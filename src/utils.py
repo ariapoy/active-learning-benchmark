@@ -50,18 +50,21 @@ def init_data_exps(X, y, seed, init_lbl_size, tst_ratio, init_trn_tst='RS', init
     X_trn, y_trn = X[idx_trn, :], y[idx_trn]
     # labelled and unlabelled pools
     if 'nShot' == init_lbl_ubl:
-        idx_n, idx_p = idx_trn[y_trn==-1], idx_trn[y_trn==1]
-        ratio_n = 1/2
-        ratio_p = 1 - ratio_n
-        size_n, size_p = int(round(init_lbl_size*ratio_n)), int(round(init_lbl_size*ratio_p))
-        if size_n != size_p:
-            size_n = min(size_n, size_p)
-            size_p = size_n
-        rng_trntst.shuffle(idx_n)
-        rng_trntst.shuffle(idx_p)
-        idx_lbl = np.append(idx_n[:size_n], idx_p[:size_p])
-        rng_trntst.shuffle(idx_lbl)
+        class_dict = {c:idx_trn[y_trn==c] for c in np.unique(y_trn)}
+        for c in class_dict:
+            rng_trntst.shuffle(class_dict[c])
+
+        idx_lbl = []
+        n = 0
+        while len(idx_lbl) <= init_lbl_size:
+            for c in class_dict:
+                idx_lbl.append(class_dict[c][n])
+            n += 1
+
+        idx_lbl = np.array(idx_lbl)
+        idx_lbl = idx_lbl[:init_lbl_size]
         idx_ubl = np.setdiff1d(idx_trn, idx_lbl)
+        rng_trntst.shuffle(idx_ubl)
         idx_trn = np.append(idx_lbl, idx_ubl)
     elif 'SameDist' == init_lbl_ubl:
         # TODO. SameDist can be the function

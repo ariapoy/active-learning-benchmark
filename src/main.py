@@ -29,7 +29,12 @@ def exp_compute(seed, data_set, qs_name, hs_name, tst_ratio, init_lbl_size, modu
 
     # initial setttings
     # training and testing sets
-    idx, idx_trn, idx_tst, idx_lbl, idx_ubl = init_data_exps(X, y, seed, init_lbl_size, tst_ratio, init_trn_tst='RS', init_trn_tst_fixSeed='noFix', init_lbl_ubl='RS')
+    if args.nShot:
+        init_lbl_ubl_type = 'nShot'
+    else:
+        init_lbl_ubl_type = 'RS'
+
+    idx, idx_trn, idx_tst, idx_lbl, idx_ubl = init_data_exps(X, y, seed, init_lbl_size, tst_ratio, init_trn_tst='RS', init_trn_tst_fixSeed='noFix', init_lbl_ubl=init_lbl_ubl_type)
     # Get X_trn, X_tst, X_lbl, X_ubl ; y_trn, y_tst, y_lbl, y_ubl
     X_trn, y_trn = X[idx_trn, :], y[idx_trn]
     X_tst, y_tst = X[idx_tst, :], y[idx_tst]
@@ -307,6 +312,8 @@ def parse_args():
                         default=None, type=int)
     parser.add_argument('--scale', action='store_true',
                         help='Scale the data or not, we use StandardScaler')
+    parser.add_argument('--nShot', action='store_true',
+                        help='N-Shot distribution for the initial labeled pool')
 
     args = parser.parse_args()
     return args
