@@ -17,29 +17,23 @@ import logging
 from tqdm import tqdm
 
 # For libact
-from libact.base.dataset import Dataset as libact_Dataset
-from libact.labelers import IdealLabeler
-
-from libact.query_strategies import RandomSampling as libact_RS
-from libact.query_strategies import QUIRE as libact_QUIRE
-from libact.query_strategies import QueryByCommittee as libact_QBC
-try:
-    from libact.query_strategies import VarianceReduction as libact_VR
-except Exception as e:
-    print('This env is not for libact.VR')
-
 import sys
 try:
     sys.path.append("../libact-dev/")
-    from libact_dev.query_strategies import KCenterGreedy as libactKCG
-    from libact_dev.query_strategies import UncertaintySampling as libact_US
+    from libact_dev.base.dataset import Dataset as libact_Dataset
     from libact_dev.models import SklearnProbaAdapter as libact_skProbaAdapter
     from libact_dev.models import SklearnContiAdapter as libact_skContiAdapter
+    from libact_dev.labelers import IdealLabeler
+    from libact_dev.query_strategies import KCenterGreedy as libactKCG
+    from libact_dev.query_strategies import UncertaintySampling as libact_US
     from libact_dev.query_strategies import ActiveLearningByLearning as libact_ALBL
     from libact_dev.query_strategies import HintSVM as libact_HSVM
     from libact_dev.query_strategies import DWUS as libact_DWUS
+    from libact_dev.query_strategies import RandomSampling as libact_RS
+    from libact_dev.query_strategies import QUIRE as libact_QUIRE
+    from libact_dev.query_strategies import QueryByCommittee as libact_QBC
+    from libact_dev.query_strategies import VarianceReduction as libact_VR
 except Exception as e:
-    print('This env is not for libact.KCenterGreedy, libact.Margin')
     pass
 
 # For Google Active Learning Playground
