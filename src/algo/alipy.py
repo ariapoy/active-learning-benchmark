@@ -6,14 +6,10 @@ sys.path.append("../../alipy-dev/")
 from alipy_dev.experiment import State
 
 def alipy_al_exps(qs, model_select, model_score, select_params, **kwargs):
-    alipy_al_exps_fcn = functools.partial(alipy_al, qs=qs, model_select=model_select, model_score=model_score,
-                                          select_params=select_params, **kwargs)
+    alipy_al_exps_fcn = functools.partial(alipy_al, qs=qs, model_select=model_select, model_score=model_score, select_params=select_params, **kwargs)
     return alipy_al_exps_fcn
 
-
-def alipy_al(round, train_id, test_id, Lcollection, Ucollection, saver, examples, labels, global_parameters,
-             qs, model_select, model_score, select_params,
-             **kwargs):
+def alipy_al(round, train_id, test_id, Lcollection, Ucollection, saver, examples, labels, global_parameters, qs, model_select, model_score, select_params, **kwargs):
     configs = kwargs['configs']
     seed = kwargs['seed']
     # file = open(f'{configs.data_set}-{configs.qs_name}-{configs.hs_name}-{configs.gs_name}-{configs.exp_name}-detail.csv', 'a')

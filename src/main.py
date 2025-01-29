@@ -29,10 +29,7 @@ def exp_compute(seed, data_set, qs_name, hs_name, tst_ratio, init_lbl_size, modu
 
     # initial setttings
     # training and testing sets
-    if args.nShot:
-        init_lbl_ubl_type = 'nShot'
-    else:
-        init_lbl_ubl_type = 'RS'
+    init_lbl_ubl_type = args.init_lbl_type # 'nShot'
 
     idx, idx_trn, idx_tst, idx_lbl, idx_ubl = init_data_exps(X, y, seed, init_lbl_size, tst_ratio, init_trn_tst='RS', init_trn_tst_fixSeed='noFix', init_lbl_ubl=init_lbl_ubl_type)
     # Get X_trn, X_tst, X_lbl, X_ubl ; y_trn, y_tst, y_lbl, y_ubl
@@ -152,7 +149,7 @@ def exp_compute(seed, data_set, qs_name, hs_name, tst_ratio, init_lbl_size, modu
 
         # Run active learning algorithm
         results = libact_al(trn_ds, tst_ds, fully_labeled_trn_ds,
-                            qs, model_select_libact, model_score, quota, lbr, seed=seed, configs=args,
+                            qs, model_select_libact, model_score, quota, lbr, seed=seed,
                             idxs=[idx, idx_trn, idx_tst, idx_lbl])
         # except Exception as e:
         #     results = traceback.format_exc()
@@ -177,8 +174,7 @@ def exp_compute(seed, data_set, qs_name, hs_name, tst_ratio, init_lbl_size, modu
 
         # Run active learning algorithm
         results = google_al(X_trn, y_trn, X_tst, y_tst, idx_lbl,
-                            qs, uniform_qs, model_select, model_score, quota, batch_size=1,
-                            X_all=X, y_all=y, indices=idx_trn, seed=seed, configs=args)
+                            X_all=X, y_all=y, indices=idx_trn, seed=seed, batch_size=args.batch_size)
         # except Exception as e:
         #     logging_print('framework', f'|Error by {e}|||||', level='error')
         #     results = e
@@ -255,8 +251,7 @@ def exp_compute(seed, data_set, qs_name, hs_name, tst_ratio, init_lbl_size, modu
         # y_trn
 
         # Run active learning algorithm
-        results = skactiveml_al(X_trn, y_lbl_skal, X_tst, y_tst, y_trn, qs, model_select_scikital, model_score, quota, seed=seed, configs=args,
-                                y_all=y, idx_trn=idx_trn, qs_name=qs_name)
+        results = skactiveml_al(X_trn, y_lbl_skal, X_tst, y_tst, y_trn, qs, model_select_scikital, model_score, quota, seed=seed, batch_size=args.batch_size, y_all=y, idx_trn=idx_trn, qs_name=qs_name)
 
     return seed, results, range(quota)
 
@@ -298,10 +293,6 @@ def parse_args():
     parser.add_argument('--init_lbl_size', dest='init_lbl_size',
                         help='Size of initial label pool. INT',
                         default=20, type=int)
-    # env
-    parser.add_argument('--exp_name', dest='exp_name',
-                        help='exp_name name',
-                        default="RS_noFix_scale", type=str)
     # module
     parser.add_argument('--tool', dest='tool',
                         help='Package name',
@@ -312,16 +303,18 @@ def parse_args():
                         default=None, type=int)
     parser.add_argument('--scale', action='store_true',
                         help='Scale the data or not, we use StandardScaler')
-    parser.add_argument('--nShot', action='store_true',
-                        help='N-Shot distribution for the initial labeled pool')
+    parser.add_argument('--init_lbl_type', default="RS", type=str,
+                        help='Random sampling (RS) or N-Shot distribution for the initial labeled pool')
+    parser.add_argument('--batch_size', default=1, type=int,
+                        help='query batch size')
+    parser.add_argument('--hyperparams_type', default="default", type=str,
+                        help='Default or best hyper-parameters of the base model')
 
     args = parser.parse_args()
     return args
 
 if __name__ == '__main__':
     args = parse_args()
-    if 'bso' in args.qs_name:
-        args.exp_name += f'_{args.lookDtst}'
 
     # module
     tool_name = args.tool
@@ -334,7 +327,10 @@ if __name__ == '__main__':
     # dataset configs
     data_set, tst_size, init_lbl_size = args.data_set, args.tst_size, args.init_lbl_size
     # env
-    exp_name = args.exp_name
+    exp_name = f"{args.hyperparams_type}_hyperparams-{args.init_lbl_type}-bs_{args.batch_size}"
+    if args.scale:
+        exp_name = f"{exp_name}-scale"
+
     # path
     export_name =  f'{data_set}-{qs_name}-{hs_name}-{gs_name}-{exp_name}'
     # logger

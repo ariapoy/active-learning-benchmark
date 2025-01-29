@@ -3,13 +3,16 @@ from utils import *
 import numpy as np
 
 def skactiveml_al(X_trn, y_trn_lbl, X_tst, y_tst, y_trn_full,
-                  qs, model_select, model_score, quota, batch_size=1,
+                  qs, model_select, model_score, quota,
                   **kwargs):
     # configurations
     y_all = kwargs.get("y_all")
     idx_trn = kwargs.get("idx_trn")
     qs_name = kwargs.get("qs_name")
-    configs = kwargs['configs']
+    batch_size = kwargs.get("batch_size")
+    if batch_size is None:
+        batch_size = 1
+
     seed = kwargs['seed']
     # quota
     quota_used = 0

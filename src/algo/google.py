@@ -19,11 +19,14 @@ def select_batch(sampler, uniform_sampler, N, already_selected,
 
 
 def google_al(X_trn, y_trn, X_tst, y_tst, idx_lbl,
-              qs, uniform_qs, model_select, model_score, quota, batch_size=1,
+              qs, uniform_qs, model_select, model_score, quota,
               **kwargs):
-    configs = kwargs['configs']
     seed = kwargs['seed']
     # file = open(f'{configs.data_set}-{configs.qs_name}-{configs.hs_name}-{configs.gs_name}-{configs.exp_name}-detail.csv', 'a')
+
+    batch_size = kwargs.get("batch_size")
+    if batch_size is None:
+        batch_size = 1
 
     y_all = kwargs.get("y_all")
     indices = kwargs.get("indices")
