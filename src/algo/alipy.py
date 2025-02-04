@@ -71,7 +71,7 @@ def alipy_al(round, train_id, test_id, Lcollection, Ucollection, saver, examples
 
         # save intermediate results
         st = State(select_index=select_index,
-                   performance=[E_lbl_score_curr, E_trn_score_curr, E_tst_score_curr, confusion_mat_curr])
+                   performance=[E_lbl_score_curr, E_trn_score_curr, E_tst_score_curr, confusion_mat_curr, al_round])
         saver.add_state(st)
 
         # update round
@@ -82,8 +82,9 @@ def alipy_al(round, train_id, test_id, Lcollection, Ucollection, saver, examples
 
 
 def alipy_al_getres(res):
+    # results
     hist_info = {
-        "E_lbl_score": [], "E_trn_score": [], "E_tst_score": [], 'confusion_mat': []
+        "E_lbl_score": [], "E_trn_score": [], "E_tst_score": [], 'confusion_mat': [], 'al_round':[],
     }
 
     res_curr = res.get_state(0)  # init model score
@@ -98,4 +99,5 @@ def alipy_al_getres(res):
         hist_info["E_trn_score"].append(res_curr["performance"][1])
         hist_info["E_tst_score"].append(res_curr["performance"][2])
         hist_info["confusion_mat"].append(res_curr["performance"][3])
+        hist_info["al_round"].append(res_curr["performance"][4])
     return hist_info

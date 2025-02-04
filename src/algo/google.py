@@ -33,7 +33,7 @@ def google_al(X_trn, y_trn, X_tst, y_tst, idx_lbl,
 
     # Results
     hist_info = {
-        "E_lbl_score": [], "E_trn_score": [], "E_tst_score": [], 'confusion_mat': []
+        "E_lbl_score": [], "E_trn_score": [], "E_tst_score": [], 'confusion_mat': [], 'idx_qrd_history': idx_lbl.tolist(), 'al_round':[],
     }
 
     # Initialize variables and first select model
@@ -55,6 +55,7 @@ def google_al(X_trn, y_trn, X_tst, y_tst, idx_lbl,
     # TODO: move evaluation to utils
     model_score.fit(partial_X, partial_y)
     E_tst_score_curr = model_score.score(X_tst, y_tst)
+    hist_info['al_round'].append(al_round)
     hist_info['E_ini_score'] = E_tst_score_curr
     y_pred = model_score.predict(X_tst)
     confusion_mat_curr = confusion_matrix(y_tst, y_pred).ravel()
@@ -106,6 +107,7 @@ def google_al(X_trn, y_trn, X_tst, y_tst, idx_lbl,
         y_pred = model_score.predict(X_tst)
         confusion_mat_curr = confusion_matrix(y_tst, y_pred).ravel()
         hist_info['confusion_mat'].append(confusion_mat_curr)
+        hist_info['al_round'].append(al_round)
 
         # file.write(f'{seed}|{al_round}|{E_tst_score_curr}|{exec_train_time}|{exec_query_time}\n')
         logging_print('update', f'|{seed}|{al_round}|{E_tst_score_curr}|{exec_train_time:.3f}|{exec_query_time:.3f}')

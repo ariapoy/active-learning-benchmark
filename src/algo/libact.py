@@ -9,7 +9,7 @@ def libact_al(trn_ds, tst_ds, openmap_trn_ds, qs, model_select, model_score, quo
     # file = open(f'{configs.data_set}-{configs.qs_name}-{configs.hs_name}-{configs.gs_name}-{configs.exp_name}-detail.csv', 'a')
     # Results
     hist_info = {
-        "E_lbl_score": [], "E_trn_score": [], "E_tst_score": [], 'confusion_mat': []
+        "E_lbl_score": [], "E_trn_score": [], "E_tst_score": [], 'confusion_mat': [], 'al_round':[],
     }
     # quota
     quota_used = 0
@@ -37,6 +37,7 @@ def libact_al(trn_ds, tst_ds, openmap_trn_ds, qs, model_select, model_score, quo
     E_tst_score_curr = model_score_libact.score(X_tst_libact, y_tst_libact)
     y_pred = model_score_libact.predict(X_tst_libact)
     confusion_mat_curr = confusion_matrix(y_tst_libact, y_pred).ravel()
+    hist_info['al_round'].append(al_round)
     hist_info['E_ini_score'] = E_tst_score_curr
     hist_info['confusion_mat_ini'] = confusion_mat_curr
     # file.write(f'{seed}|{al_round}|{E_tst_score_curr}|{exec_train_time}|\n')
@@ -83,6 +84,7 @@ def libact_al(trn_ds, tst_ds, openmap_trn_ds, qs, model_select, model_score, quo
         y_pred = model_score_libact.predict(X_tst_libact)
         confusion_mat_curr = confusion_matrix(y_tst_libact, y_pred).ravel()
         hist_info['confusion_mat'].append(confusion_mat_curr)
+        hist_info['al_round'].append(al_round)
 
         # file.write(f'{seed}|{al_round}|{E_tst_score_curr}|{exec_train_time}|{exec_query_time}\n')
         logging_print('update', f'|{seed}|{al_round}|{E_tst_score_curr}|{exec_train_time:.3f}|{exec_query_time:.3f}')

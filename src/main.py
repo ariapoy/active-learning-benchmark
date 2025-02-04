@@ -8,7 +8,7 @@ from config import SelectModelBuilder, ScoreModelBuilder, QueryStrategyBuilder
 from algo.bso import BSO, bso_al
 from algo.alipy import alipy_al_exps, alipy_al, alipy_al_getres
 from algo.google import select_batch, google_al
-from algo.libact import libact_al, AUBC
+from algo.libact import libact_al
 from algo.skactiveml import skactiveml_al
 
 def exp_compute(seed, data_set, qs_name, hs_name, tst_ratio, init_lbl_size, module="google", **kwargs):
@@ -253,7 +253,7 @@ def exp_compute(seed, data_set, qs_name, hs_name, tst_ratio, init_lbl_size, modu
         # Run active learning algorithm
         results = skactiveml_al(X_trn, y_lbl_skal, X_tst, y_tst, y_trn, qs, model_select_scikital, model_score, quota, seed=seed, batch_size=args.batch_size, y_all=y, idx_trn=idx_trn, qs_name=qs_name)
 
-    return seed, results, range(quota)
+    return seed, results, results['al_round']
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -309,6 +309,8 @@ def parse_args():
                         help='query batch size')
     parser.add_argument('--hyperparams_type', default="default", type=str,
                         help='Default or best hyper-parameters of the base model')
+    parser.add_argument('--export_name_suffix', default="", type=str,
+                        help='Suffix of export name')
 
     args = parser.parse_args()
     return args
@@ -333,6 +335,9 @@ if __name__ == '__main__':
 
     # path
     export_name =  f'{data_set}-{qs_name}-{hs_name}-{gs_name}-{exp_name}'
+    if args.export_name_suffix != "":
+        export_name = f'{export_name}-{args.export_name_suffix}'
+
     # logger
     logging_setup(f'{export_name}-detail')
     # log
@@ -380,8 +385,8 @@ if __name__ == '__main__':
     update_tst_acc = {}
     for expno, res, budget in res_list:
         if isinstance(res, dict):
-            E_lbl_score_curr = AUBC(budget, res["E_lbl_score"])
-            E_tst_score_curr = AUBC(budget, res["E_tst_score"])
+            E_lbl_score_curr = AUBC(budget, res["E_lbl_score"], bsize=args.batch_size)
+            E_tst_score_curr = AUBC(budget, res["E_tst_score"], bsize=args.batch_size)
             res_dict["res_expno"].append(expno)
             res_dict["res_lbl_score"].append(E_lbl_score_curr)
             res_dict["res_tst_score"].append(E_tst_score_curr)
@@ -399,7 +404,7 @@ if __name__ == '__main__':
     del res_list
     res = pd.DataFrame(res_dict)
     learn_curve = pd.DataFrame(learn_curve)
-    learn_curve.index = [init_lbl_size] + [init_lbl_size+1+b for b in budget]
+    learn_curve.index = budget
     learn_curve = learn_curve.T
 
     res["res_lbl_score"].mean(), res["res_tst_score"].mean()

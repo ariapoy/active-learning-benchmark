@@ -142,15 +142,16 @@ def logging_update_detail(export_name, update_tst_acc):
         logfile.to_csv(f'{export_name}-detail.csv', sep='|', index=None, header=False)
 
 def AUBC(quota, resseq, bsize=1):
-    ressum = 0.0
-    quota = len(quota)
-    if quota % bsize == 0:
-        for i in range(len(resseq)-1):
-            ressum = ressum + (resseq[i+1] + resseq[i]) * bsize / 2
-    else:
-        for i in range(len(resseq)-2):
-            ressum = ressum + (resseq[i+1] + resseq[i]) * bsize / 2
-        k = quota % bsize
-        ressum = ressum + ((resseq[-1] + resseq[-2]) * k / 2)
-    ressum = round(ressum / quota, 5)
+    # ressum = 0.0
+    # quota = len(quota)
+    # if quota % bsize == 0:
+    #     for i in range(len(resseq)-1):
+    #         ressum = ressum + (resseq[i+1] + resseq[i]) * bsize / 2
+    # else:
+    #     for i in range(len(resseq)-2):
+    #         ressum = ressum + (resseq[i+1] + resseq[i]) * bsize / 2
+    #     k = quota % bsize
+    #     ressum = ressum + ((resseq[-1] + resseq[-2]) * k / 2)
+    # ressum = round(ressum / quota, 5)
+    ressum = np.trapz(resseq, dx=bsize)/(quota[-1] - quota[0] + 1)
     return ressum
