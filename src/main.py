@@ -174,7 +174,8 @@ def exp_compute(seed, data_set, qs_name, hs_name, tst_ratio, init_lbl_size, modu
 
         # Run active learning algorithm
         results = google_al(X_trn, y_trn, X_tst, y_tst, idx_lbl,
-                            X_all=X, y_all=y, indices=idx_trn, seed=seed, batch_size=args.batch_size)
+                            qs, uniform_qs, model_select, model_score, quota, batch_size=args.batch_size,
+                            X_all=X, y_all=y, indices=idx_trn, seed=seed)
         # except Exception as e:
         #     logging_print('framework', f'|Error by {e}|||||', level='error')
         #     results = e
