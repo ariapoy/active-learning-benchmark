@@ -14,7 +14,7 @@ seed = {}
 # initial datasets
 def init_data_exps(X, y, seed, init_lbl_size, tst_ratio, init_trn_tst='RS', init_trn_tst_fixSeed='noFix', init_lbl_ubl='RS'):
     '''
-    init_trn_tst: 'RS', 'SameDist'
+    init_trn_tst: 'RS', 'SameDist', 'cifar10', 'imdb'
     init_trn_tst_fixSeed: 'noFix', 'Fix'
     init_lbl_ubl: 'RS', 'SameDist', 'nShot'
     '''
@@ -25,12 +25,17 @@ def init_data_exps(X, y, seed, init_lbl_size, tst_ratio, init_trn_tst='RS', init
 
     if init_trn_tst_fixSeed:
         rng_trntst = np.random.default_rng(0)
-        rng_trntst.shuffle(idx)
     else:
         rng_trntst = np.random.default_rng(seed)
-        rng_trntst.shuffle(idx)
 
-    if init_trn_tst == 'RS':  # random splitting of training and testing sets
+    if init_trn_tst == 'cifar10':
+        idx_trn = idx[:50000]
+        idx_tst = idx[50000:]
+    elif init_trn_tst == 'imdb':
+        idx_trn = idx[:25000]
+        idx_tst = idx[25000:]
+    elif init_trn_tst == 'RS':  # random splitting of training and testing sets
+        rng_trntst.shuffle(idx)
         idx_trn = idx[:trn_size]
         idx_tst = idx[trn_size:]
     elif init_trn_tst == 'SameDist':

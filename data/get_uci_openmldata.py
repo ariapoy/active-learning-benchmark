@@ -1,8 +1,10 @@
-from ucimlrepo import fetch_ucirepo 
+from ucimlrepo import fetch_ucirepo
+from sklearn.datasets import fetch_openml
 import numpy as np
 from sklearn.preprocessing import LabelEncoder
+import pandas as pd
 
-id_data_dict = {
+id_ucidata_dict = {
     # toy
     53: 'iris',
     149: 'vehicle',
@@ -19,14 +21,26 @@ id_data_dict = {
     697: 'academic',
 }
 
-def get_data(id):
-    data = fetch_ucirepo(id=id)
-    # data (as pandas dataframes) 
-    X = data.data.features 
-    y = data.data.targets 
+id_openmldata_dict = {
+    # 45069: 'diabetes130us',
+    46552: 'credit_rating',
+    5: 'arrhythmia',
+}
+
+def get_data(id, id_data_dict, source='uci'):
+    if source == 'uci':
+        data = fetch_ucirepo(id=id)
+        # data (as pandas dataframes)
+        X = data.data.features
+        y = data.data.targets
+    elif source == 'openml':
+        data = fetch_openml(data_id=id)
+        X = data.data
+        y = data.target
+
     # Save embeddings in LibSVM format
     with open(f'{id_data_dict[id]}-svmstyle.txt', 'w') as f:
-        X = X.values
+        X = pd.get_dummies(X).values
         y = y.values
         y = y.reshape(-1, )
         y = LabelEncoder().fit_transform(y)
@@ -38,8 +52,8 @@ def get_data(id):
             f.write(f"{target} {features}\n")
     return X, y
 
-for id in id_data_dict.keys():
-    X, y = get_data(id)
-    print(id_data_dict[id])
+for id in id_openmldata_dict.keys():
+    X, y = get_data(id, id_openmldata_dict, source='openml')
+    print(id_openmldata_dict[id])
     print(X.shape, len(np.unique(y)))
     print(np.unique(y, return_counts=True))
