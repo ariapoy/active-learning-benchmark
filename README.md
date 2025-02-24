@@ -67,9 +67,15 @@ When you use Python in [3.8, 3.9].
 8. `cd data; bash get_data_zhan21.sh; cd ..`
 9. `cd src; python main.py -h`
 
-**Warning!** If you use Python >= 3.11
+**Warning!** If you use Python == 3.13
+
+3\. `pip install -r requirements-py313.txt`
+
+**Warning!** If you use Python == 3.12
 
 3\. `pip install -r requirements-py312.txt`
+
+**Warning!** If you use Python >= 3.11
 
 6\. `git clone https://github.com/ariapoy/libact.git libact-dev; cp -r libact-dev/libact libact-dev/libact_dev`
 
