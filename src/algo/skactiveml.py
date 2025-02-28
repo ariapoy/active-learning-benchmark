@@ -47,6 +47,7 @@ def skactiveml_al(X_trn, y_trn_lbl, X_tst, y_tst, y_trn_full,
         confusion_mat_curr = confusion_matrix(y_tst, y_pred).ravel()
 
     hist_info['al_round'].append(al_round)
+    hist_info['E_ini_trn_score'] = E_trn_score_curr
     hist_info['E_ini_score'] = E_tst_score_curr
     hist_info['confusion_mat_ini'] = confusion_mat_curr
     logging_print('init', f'|{seed}|{al_round}|{E_tst_score_curr}|{exec_train_time:.3f}|')

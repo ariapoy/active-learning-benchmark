@@ -38,6 +38,7 @@ def libact_al(trn_ds, tst_ds, openmap_trn_ds, qs, model_select, model_score, quo
     y_pred = model_score_libact.predict(X_tst_libact)
     confusion_mat_curr = confusion_matrix(y_tst_libact, y_pred).ravel()
     hist_info['al_round'].append(al_round)
+    hist_info['E_ini_trn_score'] = E_trn_score_curr
     hist_info['E_ini_score'] = E_tst_score_curr
     hist_info['confusion_mat_ini'] = confusion_mat_curr
     # file.write(f'{seed}|{al_round}|{E_tst_score_curr}|{exec_train_time}|\n')

@@ -259,7 +259,14 @@ def exp_compute(seed, data_set, qs_name, hs_name, tst_ratio, init_lbl_size, modu
         # Run active learning algorithm
         results = skactiveml_al(X_trn, y_lbl_skal, X_tst, y_tst, y_trn, qs, model_select_scikital, model_score, quota, seed=seed, batch_size=args.batch_size, y_all=y, idx_trn=idx_trn, qs_name=qs_name)
 
-    return seed, results, results['al_round']
+    trn_class_dist = {c: cnt for c, cnt in zip(*np.unique(y_trn, return_counts=True))}
+    tst_class_dist = {c: cnt for c, cnt in zip(*np.unique(y_tst, return_counts=True))}
+    class_dict = {
+        'trn': trn_class_dist,
+        'tst': tst_class_dist,
+    }
+    class_dict = str(class_dict)
+    return seed, results, results['al_round'], class_dict
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -310,7 +317,7 @@ def parse_args():
     parser.add_argument('--scale', action='store_true',
                         help='Scale the data or not, we use StandardScaler')
     parser.add_argument('--init_lbl_type', default="RS", type=str,
-                        help='Random sampling (RS) or N-Shot distribution for the initial labeled pool')
+                        help='Random sampling (RS) or N-Shot (nShot) distribution for the initial labeled pool')
     parser.add_argument('--batch_size', default=1, type=int,
                         help='query batch size')
     parser.add_argument('--hyperparams_type', default="default", type=str,
@@ -383,24 +390,34 @@ if __name__ == '__main__':
 
     res_dict = {
         "res_expno": [],
-        "res_lbl_score": [],
-        "res_tst_score": []
+        "res_trn_score": [],
+        "res_tst_score": [],
     }
     error_log = {}
     learn_curve = {}
-    update_tst_acc = {}
-    for expno, res, budget in res_list:
+    learn_curve_trn = {}
+    shift_gap_curve = {}  # collection of distribution shift for each round: tst_acc_t - trn_acc_t, https://arxiv.org/pdf/2312.07577
+    # update_tst_acc = {}
+    class_dist = {
+        "res_expno": [],
+        "class_dist": [],
+    }
+    for expno, res, budget, c_dist in res_list:
         if isinstance(res, dict):
-            E_lbl_score_curr = AUBC(budget, res["E_lbl_score"], bsize=args.batch_size)
-            E_tst_score_curr = AUBC(budget, res["E_tst_score"], bsize=args.batch_size)
+            AUBC_trn_score_curr = AUBC(budget, res["E_trn_score"], bsize=args.batch_size)
+            AUBC_tst_score_curr = AUBC(budget, res["E_tst_score"], bsize=args.batch_size)
             res_dict["res_expno"].append(expno)
-            res_dict["res_lbl_score"].append(E_lbl_score_curr)
-            res_dict["res_tst_score"].append(E_tst_score_curr)
+            res_dict["res_trn_score"].append(AUBC_trn_score_curr)
+            res_dict["res_tst_score"].append(AUBC_tst_score_curr)
             learn_curve[expno] = [res['E_ini_score']] + res['E_tst_score']
+            learn_curve_trn[expno] = [res['E_ini_trn_score']] + res['E_trn_score']
+            shift_gap_curve[expno] = np.array(learn_curve[expno]) - np.array(learn_curve_trn[expno])
+            class_dist["res_expno"].append(expno)
+            class_dist["class_dist"].append(c_dist)
             # update detail
-            for rnd, tst in enumerate(res["E_tst_score"]):
-                rnd = rnd + init_lbl_size + 1
-                update_tst_acc[(expno, rnd)] = tst
+            # for rnd, tst in enumerate(res["E_tst_score"]):
+                # rnd = rnd + init_lbl_size + 1
+                # update_tst_acc[(expno, rnd)] = tst
         else:
             if error_log.get(str(res)):
                 error_log[str(res)] += ",{0}".format(expno)
@@ -412,14 +429,18 @@ if __name__ == '__main__':
     learn_curve = pd.DataFrame(learn_curve)
     learn_curve.index = budget
     learn_curve = learn_curve.T
+    shift_gap_curve = pd.DataFrame(shift_gap_curve)
+    shift_gap_curve.index = budget
+    shift_gap_curve = shift_gap_curve.T
+    class_dist = pd.DataFrame(class_dist)
 
-    res["res_lbl_score"].mean(), res["res_tst_score"].mean()
+    # res["res_trn_score"].mean(), res["res_tst_score"].mean()
 
     if os.path.isfile(f'{export_name}-aubc.csv'):
         res.to_csv(f'{export_name}-aubc.csv', index=None, mode="a", header=None)
         # drop duplicates
         res = pd.read_csv(f'{export_name}-aubc.csv')
-        res.columns = ['res_expno', 'res_lbl_score', 'res_tst_score']
+        res.columns = ['res_expno', 'res_trn_score', 'res_tst_score']
         res = res.drop_duplicates(keep='last')
         res.to_csv(f'{export_name}-aubc.csv', index=None)
     else:
@@ -433,6 +454,25 @@ if __name__ == '__main__':
         learn_curve.to_csv(f'{export_name}-learn_curve.csv')
     else:
         learn_curve.to_csv(f'{export_name}-learn_curve.csv')
+
+    if os.path.isfile(f'{export_name}-shift_gap_curve.csv'):
+        shift_gap_curve.to_csv(f'{export_name}-shift_gap_curve.csv', mode="a", header=None)
+        # drop duplicates
+        shift_gap_curve = pd.read_csv(f'{export_name}-shift_gap_curve.csv', index_col=0,)
+        shift_gap_curve = shift_gap_curve.drop_duplicates(keep='last')
+        shift_gap_curve.to_csv(f'{export_name}-shift_gap_curve.csv')
+    else:
+        shift_gap_curve.to_csv(f'{export_name}-shift_gap_curve.csv')
+
+    if os.path.isfile(f'{export_name}-class_dist.csv'):
+        class_dist.to_csv(f'{export_name}-class_dist.csv', index=None, mode="a", header=None)
+        # drop duplicates
+        class_dist = pd.read_csv(f'{export_name}-class_dist.csv')
+        class_dist.columns = ['res_expno', 'class_dist']
+        class_dist = class_dist.drop_duplicates(keep='last')
+        class_dist.to_csv(f'{export_name}-class_dist.csv', index=None)
+    else:
+        class_dist.to_csv(f'{export_name}-class_dist.csv', index=None)
 
     if len(error_log) > 0:
         logging_print('algo', f'|{repr(error_log)}|||||', level='error')

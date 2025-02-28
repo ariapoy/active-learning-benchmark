@@ -54,8 +54,10 @@ def google_al(X_trn, y_trn, X_tst, y_tst, idx_lbl,
 
     # TODO: move evaluation to utils
     model_score.fit(partial_X, partial_y)
+    E_trn_score_curr = model_score.score(X_trn, y_trn)
     E_tst_score_curr = model_score.score(X_tst, y_tst)
     hist_info['al_round'].append(al_round)
+    hist_info['E_ini_trn_score'] = E_trn_score_curr
     hist_info['E_ini_score'] = E_tst_score_curr
     y_pred = model_score.predict(X_tst)
     confusion_mat_curr = confusion_matrix(y_tst, y_pred).ravel()

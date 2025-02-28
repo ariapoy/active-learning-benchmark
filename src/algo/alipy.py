@@ -28,6 +28,7 @@ def alipy_al(round, train_id, test_id, Lcollection, Ucollection, saver, examples
     # evaluation by score model
     model_score.fit(X=examples[Lcollection.index, :],
                     y=labels[Lcollection.index])
+    E_trn_score_curr = model_score.score(examples[train_id, :], labels[train_id])
     E_tst_score_curr = model_score.score(examples[test_id, :], labels[test_id])
     y_pred = model_score.predict(examples[test_id, :])
     confusion_mat_curr = confusion_matrix(labels[test_id], y_pred).ravel()
@@ -36,7 +37,7 @@ def alipy_al(round, train_id, test_id, Lcollection, Ucollection, saver, examples
 
     # save intermediate results
     st = State(select_index=None,
-               performance=[E_tst_score_curr, confusion_mat_curr])
+               performance=[E_tst_score_curr, confusion_mat_curr, E_trn_score_curr])
     saver.add_state(st)
 
     while quota > 0:
@@ -88,6 +89,7 @@ def alipy_al_getres(res):
     }
 
     res_curr = res.get_state(0)  # init model score
+    hist_info['E_ini_trn_score'] = res_curr['performance'][2]
     hist_info['E_ini_score'] = res_curr['performance'][0]
     hist_info['confusion_mat_ini'] = res_curr['performance'][1]
 
