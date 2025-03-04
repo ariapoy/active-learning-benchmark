@@ -321,7 +321,7 @@ def parse_args():
     parser.add_argument('--batch_size', default=1, type=int,
                         help='query batch size')
     parser.add_argument('--hyperparams_type', default="default", type=str,
-                        help='Default or best hyper-parameters of the base model')
+                        help='default or best hyper-parameters of the base model')
     parser.add_argument('--export_name_suffix', default="", type=str,
                         help='Suffix of export name')
 
