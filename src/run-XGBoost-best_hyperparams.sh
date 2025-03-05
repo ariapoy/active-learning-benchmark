@@ -14,7 +14,7 @@ for QS in "uniform" "google_us_margin"; do
   for data in "appendicitis" "sonar" "parkinsons" "ex8b" "heart" "haberman" "ionosphere" "clean1" "breast" "wdbc" "australian" "diabetes" "mammographic" "ex8a" "tic" "german" "splice" "gcloudb" "gcloudub" "checkerboard"; do
     echo "Start $QS with $QUERY on $data, repeated $N_EXP times with $N_JOBS process."
       for s in $(seq $SEED $N_JOBS $END); do #
-        timeout 25920 python main.py --data_set $data --qs_name $QS --hs_name $QUERY --gs_name $TASK --seed $s --n_jobs $N_JOBS --n_trials $N_JOBS --tool $TOOL;
+        timeout 25920 python main.py --data_set $data --qs_name $QS --hyperparams_type "best" --hs_name $QUERY --gs_name $TASK --seed $s --n_jobs $N_JOBS --n_trials $N_JOBS --tool $TOOL;
       done
   done
 done
