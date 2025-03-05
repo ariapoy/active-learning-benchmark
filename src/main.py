@@ -2,7 +2,6 @@ import traceback
 import argparse
 from headers import *
 from utils import *
-from sklearn.preprocessing import LabelEncoder
 from config import SelectModelBuilder, ScoreModelBuilder, QueryStrategyBuilder
 
 from algo.bso import BSO, bso_al
@@ -88,6 +87,14 @@ def exp_compute(seed, data_set, qs_name, hs_name, tst_ratio, init_lbl_size, modu
         model_score = ScoreModelBuilder(gs_name)
     else:
         model_score = copy.deepcopy(model_select)
+
+    if args.hyperparams_type == 'best':
+        with open(f'best_hyperparams/{data_set}-best_params.json', "r") as f:
+            best_params_dict = json.load(f)
+            best_params_dict = best_params_dict[data_set]
+
+        model_select.set_params(**best_params_dict)
+        model_score.set_params(**best_params_dict)
 
     # Query strategy
     qs_dict = QueryStrategyBuilder(qs_name)

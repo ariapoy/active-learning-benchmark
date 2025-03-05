@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 
 from sklearn.datasets import load_svmlight_file
+from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import BaggingClassifier
 
@@ -14,6 +15,7 @@ import copy
 import os
 import time
 import logging
+import json
 from tqdm import tqdm
 
 # For libact

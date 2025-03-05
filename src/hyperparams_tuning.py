@@ -85,7 +85,7 @@ param_grid = {
 
 hs_name = 'XGBoost'
 data_sets = [
-    "appendicitis", "sonar", "parkinsons", "ex8b", "haberman", "ionosphere", "clean1", "breast", "wdbc", "australian", "diabetes", "mammographic", "ex8a", "tic", "german", "splice", "gcloudb", "gcloudub", "checkerboard",
+    "appendicitis", "sonar", "parkinsons", "ex8b", "heart", "haberman", "ionosphere", "clean1", "breast", "wdbc", "australian", "diabetes", "mammographic", "ex8a", "tic", "german", "splice", "gcloudb", "gcloudub", "checkerboard",
 ]
 
 # data_set = 'heart'
@@ -104,6 +104,7 @@ for data_set in data_sets:
     else:  # multi-class
         # mapping y to [0, 1, 2, ...]
         y = LabelEncoder().fit_transform(y)
+
     best_params = tune_and_save_best_params(X, y, param_grid, f"{data_set}")
 
     with open(f'{data_set}-best_params.json', "r") as f:
