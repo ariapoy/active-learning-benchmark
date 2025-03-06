@@ -10,7 +10,7 @@ END=$(($SEED + $N_EXP - 1));
 N_JOBS="5";
 
 # list datasets and init_lbl_size as array
-DATASETS=("wine" "vehicle" "tic" "myocardial" "credit_rating" "abalone" "winequality" "bean" "rt_iot2022")
+DATASETS=("appendicitis" "tic" "myocardial" "abalone" "bean" "diabetes130us" "rt_iot2022")
 INIT_LBL_SIZES=(3 5 2 2 10 21 7 7 12)
 
 # scikital
