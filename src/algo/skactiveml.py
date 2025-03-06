@@ -21,6 +21,7 @@ def skactiveml_al(X_trn, y_trn_lbl, X_tst, y_tst, y_trn_full,
     # results
     hist_info = {
         "E_lbl_score": [], "E_trn_score": [], "E_tst_score": [], 'confusion_mat': [], 'idx_qrd_history': idx_lbl.tolist(), 'al_round':[],
+        'E_tst_f1score': [],
     }
     # initialize query-oriented and task-oriented models
     start_train_time = time.time()
@@ -38,6 +39,7 @@ def skactiveml_al(X_trn, y_trn_lbl, X_tst, y_tst, y_trn_full,
         E_tst_score_curr = model_select.score(X_tst, y_tst)
         y_pred = model_select.predict(X_tst)
         confusion_mat_curr = confusion_matrix(y_tst, y_pred).ravel()
+        E_tst_f1_score = f1_score(y_tst, y_pred, average='weighted')
     else:
         model_score.fit(X_lbl_curr, y_lbl_curr)
         E_lbl_score_curr = model_score.score(X_lbl_curr, y_lbl_curr)
@@ -45,11 +47,13 @@ def skactiveml_al(X_trn, y_trn_lbl, X_tst, y_tst, y_trn_full,
         E_tst_score_curr = model_score.score(X_tst, y_tst)
         y_pred = model_score.predict(X_tst)
         confusion_mat_curr = confusion_matrix(y_tst, y_pred).ravel()
+        E_tst_f1_score = f1_score(y_tst, y_pred, average='weighted')
 
     hist_info['al_round'].append(al_round)
     hist_info['E_ini_trn_score'] = E_trn_score_curr
     hist_info['E_ini_score'] = E_tst_score_curr
     hist_info['confusion_mat_ini'] = confusion_mat_curr
+    hist_info['E_tst_f1score'].append(E_tst_f1_score)
     logging_print('init', f'|{seed}|{al_round}|{E_tst_score_curr}|{exec_train_time:.3f}|')
 
     # active learning loop
@@ -80,6 +84,7 @@ def skactiveml_al(X_trn, y_trn_lbl, X_tst, y_tst, y_trn_full,
             E_tst_score_curr = model_select.score(X_tst, y_tst)
             y_pred = model_select.predict(X_tst)
             confusion_mat_curr = confusion_matrix(y_tst, y_pred).ravel()
+            E_tst_f1_score = f1_score(y_tst, y_pred, average='weighted')
         else:
             model_score.fit(X_lbl_curr, y_lbl_curr)
             E_lbl_score_curr = model_score.score(X_lbl_curr, y_lbl_curr)
@@ -87,11 +92,13 @@ def skactiveml_al(X_trn, y_trn_lbl, X_tst, y_tst, y_trn_full,
             E_tst_score_curr = model_score.score(X_tst, y_tst)
             y_pred = model_score.predict(X_tst)
             confusion_mat_curr = confusion_matrix(y_tst, y_pred).ravel()
+            E_tst_f1_score = f1_score(y_tst, y_pred, average='weighted')
         
         hist_info["E_lbl_score"].append(E_lbl_score_curr)
         hist_info["E_trn_score"].append(E_trn_score_curr)
         hist_info["E_tst_score"].append(E_tst_score_curr)
         hist_info['confusion_mat'].append(confusion_mat_curr)
+        hist_info['E_tst_f1score'].append(E_tst_f1_score)
         hist_info['idx_qrd_history'] += idx_qrd.tolist()
         hist_info['al_round'].append(al_round)
         logging_print('update', f'|{seed}|{al_round}|{E_tst_score_curr}|{exec_train_time:.3f}|{exec_query_time:.3f}')

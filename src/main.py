@@ -404,6 +404,7 @@ if __name__ == '__main__':
     learn_curve = {}
     learn_curve_trn = {}
     shift_gap_curve = {}  # collection of distribution shift for each round: tst_acc_t - trn_acc_t, https://arxiv.org/pdf/2312.07577
+    f1_score_curve = {}
     # update_tst_acc = {}
     class_dist = {
         "res_expno": [],
@@ -419,6 +420,7 @@ if __name__ == '__main__':
             learn_curve[expno] = [res['E_ini_score']] + res['E_tst_score']
             learn_curve_trn[expno] = [res['E_ini_trn_score']] + res['E_trn_score']
             shift_gap_curve[expno] = np.array(learn_curve[expno]) - np.array(learn_curve_trn[expno])
+            f1_score_curve[expno] = res['E_tst_f1score']
             class_dist["res_expno"].append(expno)
             class_dist["class_dist"].append(c_dist)
             # update detail
@@ -439,6 +441,9 @@ if __name__ == '__main__':
     shift_gap_curve = pd.DataFrame(shift_gap_curve)
     shift_gap_curve.index = budget
     shift_gap_curve = shift_gap_curve.T
+    f1_score_curve = pd.DataFrame(f1_score_curve)
+    f1_score_curve.index = budget
+    f1_score_curve = f1_score_curve.T
     class_dist = pd.DataFrame(class_dist)
 
     # res["res_trn_score"].mean(), res["res_tst_score"].mean()
@@ -470,6 +475,15 @@ if __name__ == '__main__':
         shift_gap_curve.to_csv(f'{export_name}-shift_gap_curve.csv')
     else:
         shift_gap_curve.to_csv(f'{export_name}-shift_gap_curve.csv')
+
+    if os.path.isfile(f'{export_name}-f1_score_curve.csv'):
+        f1_score_curve.to_csv(f'{export_name}-f1_score_curve.csv', mode="a", header=None)
+        # drop duplicates
+        f1_score_curve = pd.read_csv(f'{export_name}-f1_score_curve.csv', index_col=0,)
+        f1_score_curve = f1_score_curve.drop_duplicates(keep='last')
+        f1_score_curve.to_csv(f'{export_name}-f1_score_curve.csv')
+    else:
+        f1_score_curve.to_csv(f'{export_name}-f1_score_curve.csv')
 
     if os.path.isfile(f'{export_name}-class_dist.csv'):
         class_dist.to_csv(f'{export_name}-class_dist.csv', index=None, mode="a", header=None)

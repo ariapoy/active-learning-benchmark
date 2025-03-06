@@ -2,7 +2,7 @@ import threading
 import logging
 import os
 import sys
-from sklearn.metrics import confusion_matrix
+from sklearn.metrics import confusion_matrix, f1_score
 import numpy as np
 import pandas as pd
 

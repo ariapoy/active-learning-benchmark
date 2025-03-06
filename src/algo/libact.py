@@ -4,12 +4,11 @@ import numpy as np
 
 
 def libact_al(trn_ds, tst_ds, openmap_trn_ds, qs, model_select, model_score, quota, lbr, **kwargs):
-    configs = kwargs['configs']
     seed = kwargs['seed']
-    # file = open(f'{configs.data_set}-{configs.qs_name}-{configs.hs_name}-{configs.gs_name}-{configs.exp_name}-detail.csv', 'a')
     # Results
     hist_info = {
         "E_lbl_score": [], "E_trn_score": [], "E_tst_score": [], 'confusion_mat': [], 'al_round':[],
+        'E_tst_f1score': [],
     }
     # quota
     quota_used = 0
@@ -37,10 +36,12 @@ def libact_al(trn_ds, tst_ds, openmap_trn_ds, qs, model_select, model_score, quo
     E_tst_score_curr = model_score_libact.score(X_tst_libact, y_tst_libact)
     y_pred = model_score_libact.predict(X_tst_libact)
     confusion_mat_curr = confusion_matrix(y_tst_libact, y_pred).ravel()
+    E_tst_f1_score = f1_score(y_tst_libact, y_pred, average='weighted')
     hist_info['al_round'].append(al_round)
     hist_info['E_ini_trn_score'] = E_trn_score_curr
     hist_info['E_ini_score'] = E_tst_score_curr
     hist_info['confusion_mat_ini'] = confusion_mat_curr
+    hist_info['E_tst_f1score'].append(E_tst_f1_score)
     # file.write(f'{seed}|{al_round}|{E_tst_score_curr}|{exec_train_time}|\n')
     logging_print('init', f'|{seed}|{al_round}|{E_tst_score_curr}|{exec_train_time:.3f}|')
 
@@ -85,6 +86,8 @@ def libact_al(trn_ds, tst_ds, openmap_trn_ds, qs, model_select, model_score, quo
         y_pred = model_score_libact.predict(X_tst_libact)
         confusion_mat_curr = confusion_matrix(y_tst_libact, y_pred).ravel()
         hist_info['confusion_mat'].append(confusion_mat_curr)
+        E_tst_f1_score = f1_score(y_tst_libact, y_pred, average='weighted')
+        hist_info['E_tst_f1score'].append(E_tst_f1_score)
         hist_info['al_round'].append(al_round)
 
         # file.write(f'{seed}|{al_round}|{E_tst_score_curr}|{exec_train_time}|{exec_query_time}\n')
