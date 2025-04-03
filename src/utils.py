@@ -12,18 +12,19 @@ logger = logging
 seed = {}
 
 # initial datasets
-def init_data_exps(X, y, seed, init_lbl_size, tst_ratio, init_trn_tst='RS', init_trn_tst_fixSeed='noFix', init_lbl_ubl='RS'):
+def init_data_exps(X, y, seed, init_lbl_size, tst_ratio, init_trn_tst='RS', init_trn_tst_fixSeed='noFix', init_lbl_ubl='RS', init_lbl_ubl_fixSeed='noFix'):
     '''
-    init_trn_tst: 'RS', 'SameDist', 'cifar10', 'imdb'
+    init_trn_tst: 'RS', 'SameDist', 'cifar10', 'imdb',
     init_trn_tst_fixSeed: 'noFix', 'Fix'
     init_lbl_ubl: 'RS', 'SameDist', 'nShot'
+    init_lbl_ubl_fixSeed: 'noFix', 'Fix'
     '''
     # training and testing sets
     idx = np.arange(X.shape[0])
     trn_size = int(idx.shape[0]*(1 - tst_ratio))
     tst_size = idx.shape[0] - trn_size
 
-    if init_trn_tst_fixSeed:
+    if init_trn_tst_fixSeed == "Fix":
         rng_trntst = np.random.default_rng(0)
     else:
         rng_trntst = np.random.default_rng(seed)
@@ -50,7 +51,11 @@ def init_data_exps(X, y, seed, init_lbl_size, tst_ratio, init_trn_tst='RS', init
         idx_trn = np.setdiff1d(idx, idx_tst)
         rng_trntst.shuffle(idx_trn)
 
-    rng_trntst = np.random.default_rng(seed)
+    if init_lbl_ubl_fixSeed == "Fix":
+        rng_trntst = np.random.default_rng(0)
+    else:
+        rng_trntst = np.random.default_rng(seed)
+
     # Get X_trn, X_tst, X_lbl, X_ubl ; y_trn, y_tst, y_lbl, y_ubl
     X_trn, y_trn = X[idx_trn, :], y[idx_trn]
     # labelled and unlabelled pools

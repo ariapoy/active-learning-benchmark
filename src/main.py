@@ -29,13 +29,15 @@ def exp_compute(seed, data_set, qs_name, hs_name, tst_ratio, init_lbl_size, modu
     # initial setttings
     # training and testing sets
     init_lbl_ubl_type = args.init_lbl_type # 'nShot'
+    init_trn_tst_fix_type = args.init_trn_tst_fix_type  # noFix, Fix
+    init_set_fix_type = args.init_set_fix_type  # noFix, 'Fix
 
     if data_set in ['cifar10', 'imdb']:
         init_trn_tst_ = data_set
     else:
         init_trn_tst_ = 'RS'
 
-    idx, idx_trn, idx_tst, idx_lbl, idx_ubl = init_data_exps(X, y, seed, init_lbl_size, tst_ratio, init_trn_tst=init_trn_tst_, init_trn_tst_fixSeed='noFix', init_lbl_ubl=init_lbl_ubl_type)
+    idx, idx_trn, idx_tst, idx_lbl, idx_ubl = init_data_exps(X, y, seed, init_lbl_size, tst_ratio, init_trn_tst=init_trn_tst_, init_trn_tst_fixSeed=init_trn_tst_fix_type, init_lbl_ubl=init_lbl_ubl_type, init_lbl_ubl_fixSeed=init_set_fix_type)
     # Get X_trn, X_tst, X_lbl, X_ubl ; y_trn, y_tst, y_lbl, y_ubl
     X_trn, y_trn = X[idx_trn, :], y[idx_trn]
     X_tst, y_tst = X[idx_tst, :], y[idx_tst]
@@ -325,6 +327,10 @@ def parse_args():
                         help='Scale the data or not, we use StandardScaler')
     parser.add_argument('--init_lbl_type', default="RS", type=str,
                         help='Random sampling (RS) or N-Shot (nShot) distribution for the initial labeled pool')
+    parser.add_argument('--init_trn_tst_fix_type', default="noFix", type=str,
+                        help='Fix or noFix of initial train-test split')
+    parser.add_argument('--init_set_fix_type', default="noFix", type=str,
+                        help='Fix or noFix of initial set')
     parser.add_argument('--batch_size', default=1, type=int,
                         help='query batch size')
     parser.add_argument('--hyperparams_type', default="default", type=str,
@@ -349,7 +355,7 @@ if __name__ == '__main__':
     # dataset configs
     data_set, tst_size, init_lbl_size = args.data_set, args.tst_size, args.init_lbl_size
     # env
-    exp_name = f"{args.hyperparams_type}_hyperparams-{args.init_lbl_type}-bs_{args.batch_size}"
+    exp_name = f"{args.hyperparams_type}_hyperparams-{args.init_lbl_type}-bs_{args.batch_size}-initialseeds_{args.init_trn_tst_fix_type}_{args.init_set_fix_type}"
     if args.scale:
         exp_name = f"{exp_name}-scale"
 
