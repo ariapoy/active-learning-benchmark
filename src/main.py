@@ -266,7 +266,7 @@ def exp_compute(seed, data_set, qs_name, hs_name, tst_ratio, init_lbl_size, modu
         # y_trn
 
         # Run active learning algorithm
-        results = skactiveml_al(X_trn, y_lbl_skal, X_tst, y_tst, y_trn, qs, model_select_scikital, model_score, quota, seed=seed, batch_size=args.batch_size, y_all=y, idx_trn=idx_trn, qs_name=qs_name)
+        results = skactiveml_al(X_trn, y_lbl_skal, X_tst, y_tst, y_trn, qs, model_select_scikital, model_score, quota, seed=seed, batch_size=args.batch_size, y_all=y, idx_trn=idx_trn, qs_name=qs_name, idx_all=idx)
 
     trn_class_dist = {c: cnt for c, cnt in zip(*np.unique(y_trn, return_counts=True))}
     tst_class_dist = {c: cnt for c, cnt in zip(*np.unique(y_tst, return_counts=True))}
@@ -275,7 +275,8 @@ def exp_compute(seed, data_set, qs_name, hs_name, tst_ratio, init_lbl_size, modu
         'tst': tst_class_dist,
     }
     class_dict = str(class_dict)
-    return seed, results, results['al_round'], class_dict
+    idx_qrd = str(results['idx_qrd_history'])
+    return seed, results, results['al_round'], class_dict, idx_qrd
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -416,7 +417,11 @@ if __name__ == '__main__':
         "res_expno": [],
         "class_dist": [],
     }
-    for expno, res, budget, c_dist in res_list:
+    idx_qrd_history = {
+        "res_expno": [],
+        "idx": [],
+    }
+    for expno, res, budget, c_dist, idx_qrd in res_list:
         if isinstance(res, dict):
             AUBC_trn_score_curr = AUBC(budget, res["E_trn_score"], bsize=args.batch_size)
             AUBC_tst_score_curr = AUBC(budget, res["E_tst_score"], bsize=args.batch_size)
@@ -429,6 +434,8 @@ if __name__ == '__main__':
             f1_score_curve[expno] = res['E_tst_f1score']
             class_dist["res_expno"].append(expno)
             class_dist["class_dist"].append(c_dist)
+            idx_qrd_history["res_expno"].append(expno)
+            idx_qrd_history["idx"].append(idx_qrd)
             # update detail
             # for rnd, tst in enumerate(res["E_tst_score"]):
                 # rnd = rnd + init_lbl_size + 1
@@ -451,6 +458,7 @@ if __name__ == '__main__':
     f1_score_curve.index = budget
     f1_score_curve = f1_score_curve.T
     class_dist = pd.DataFrame(class_dist)
+    idx_qrd_history = pd.DataFrame(idx_qrd_history)
 
     # res["res_trn_score"].mean(), res["res_tst_score"].mean()
 
@@ -500,6 +508,16 @@ if __name__ == '__main__':
         class_dist.to_csv(f'{export_name}-class_dist.csv', index=None)
     else:
         class_dist.to_csv(f'{export_name}-class_dist.csv', index=None)
+
+    if os.path.isfile(f'{export_name}-idx_qrd_history.csv'):
+        idx_qrd_history.to_csv(f'{export_name}-idx_qrd_history.csv', index=None, mode="a", header=None)
+        # drop duplicates
+        idx_qrd_history = pd.read_csv(f'{export_name}-idx_qrd_history.csv')
+        idx_qrd_history.columns = ['res_expno', 'idx_qrd_history']
+        idx_qrd_history = idx_qrd_history.drop_duplicates(keep='last')
+        idx_qrd_history.to_csv(f'{export_name}-idx_qrd_history.csv', index=None)
+    else:
+        idx_qrd_history.to_csv(f'{export_name}-idx_qrd_history.csv', index=None)
 
     if len(error_log) > 0:
         logging_print('algo', f'|{repr(error_log)}|||||', level='error')
