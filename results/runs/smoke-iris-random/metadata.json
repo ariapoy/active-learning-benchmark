@@ -1,0 +1,14 @@
+{
+  "dataset": "sklearn:iris",
+  "strategy": "random",
+  "strategy_category": "Baseline",
+  "strategy_framework": "sklearn-native",
+  "model": "LR",
+  "seed": 0,
+  "n_trials": 1,
+  "test_size": 0.4,
+  "init_labels": 6,
+  "budget": 5,
+  "batch_size": 1,
+  "scale": false
+}

@@ -18,7 +18,7 @@ for TASK in "RandomForest" "LR"; do
   for data in "sonar" "haberman" "ionosphere" "tic" "gcloudb" "appendicitis" "checkerboard" "breast"; do
     echo "Start $QS with $HS of $data on $EXP with $N_JOBS"
     for s in $(seq $SEED $N_JOBS $END); do #
-      timeout 25920 python main.py --tool $TOOL --qs_name $QS --hs_name $QUERY --gs_name $TASK --seed $s --n_jobs $N_JOBS --n_trials $N_JOBS --data_set $data;
+      timeout 25920 python legacy_main.py --tool $TOOL --qs_name $QS --hs_name $QUERY --gs_name $TASK --seed $s --n_jobs $N_JOBS --n_trials $N_JOBS --data_set $data;
     done
   done
 done

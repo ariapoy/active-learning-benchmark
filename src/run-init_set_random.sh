@@ -21,7 +21,7 @@ for QS in "skal_uniform" "skal_us_margin"; do
       for InitSet in "Fix" "noFix"; do
         echo "Exps for $QS on ${DATASETS[$i]} with $TrainTest train-test and $InitSet initial set";
         for s in $(seq $SEED $N_JOBS $END); do #
-          timeout 86400 python main.py --data_set "${DATASETS[$i]}" --qs_name $QS --hs_name $QUERY --gs_name $TASK --seed $s --n_jobs $N_JOBS --n_trials $N_JOBS --tool $TOOL --scale --total_budget "3000" --init_trn_tst_fix_type $TrainTest --init_set_fix_type $InitSet;
+          timeout 86400 python legacy_main.py --data_set "${DATASETS[$i]}" --qs_name $QS --hs_name $QUERY --gs_name $TASK --seed $s --n_jobs $N_JOBS --n_trials $N_JOBS --tool $TOOL --scale --total_budget "3000" --init_trn_tst_fix_type $TrainTest --init_set_fix_type $InitSet;
         done
       done
     done

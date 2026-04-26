@@ -39,25 +39,50 @@ except Exception as e:
     pass
 
 # For Google Active Learning Playground
-sys.path.append("../active-learning/")
-from sampling_methods.constants import get_wrapper_AL_mapping
-from sampling_methods.constants import get_AL_sampler
-from sampling_methods.constants import AL_MAPPING
-get_wrapper_AL_mapping()
+try:
+    sys.path.append("../active-learning/")
+    from sampling_methods.constants import get_wrapper_AL_mapping
+    from sampling_methods.constants import get_AL_sampler
+    from sampling_methods.constants import AL_MAPPING
+    get_wrapper_AL_mapping()
+except Exception:
+    AL_MAPPING = {}
+    get_AL_sampler = None
+    get_wrapper_AL_mapping = None
 
 # # For ALiPy debugging
-from alipy.data_manipulate import split
-sys.path.append("../alipy-dev/")
-from alipy_dev.query_strategy import QueryInstanceRandom
-from alipy_dev.query_strategy import QueryInstanceLAL
-from alipy_dev.query_strategy import QueryExpectedErrorReduction, QueryInstanceBMDR, QueryInstanceSPAL
-from alipy_dev.query_strategy import QueryInstanceRandom, QueryInstanceUncertainty, QueryInstanceQBC
-from alipy_dev.experiment import State
-from alipy_dev.utils.multi_thread import aceThreading
+try:
+    from alipy.data_manipulate import split
+    sys.path.append("../alipy-dev/")
+    try:
+        from alipy_dev.query_strategy import QueryInstanceRandom
+        from alipy_dev.query_strategy import QueryInstanceLAL
+        from alipy_dev.query_strategy import QueryExpectedErrorReduction, QueryInstanceBMDR, QueryInstanceSPAL
+        from alipy_dev.query_strategy import QueryInstanceRandom, QueryInstanceUncertainty, QueryInstanceQBC
+        from alipy_dev.experiment import State
+        from alipy_dev.utils.multi_thread import aceThreading
+    except Exception:
+        from alipy.query_strategy import QueryInstanceRandom
+        from alipy.query_strategy import QueryInstanceLAL
+        from alipy.query_strategy import QueryExpectedErrorReduction, QueryInstanceBMDR, QueryInstanceSPAL
+        from alipy.query_strategy import QueryInstanceRandom, QueryInstanceUncertainty, QueryInstanceQBC
+        from alipy.experiment import State
+        from alipy.utils.multi_thread import aceThreading
+except Exception:
+    pass
 
 # For scikit-activeml
-sys.path.append("../scikit-activeml-dev/")
-from skactiveml_dev.utils import MISSING_LABEL, labeled_indices, unlabeled_indices
-from skactiveml_dev.classifier import SklearnClassifier
-from skactiveml_dev.pool import UncertaintySampling, BatchBALD, EpistemicUncertaintySampling, QueryByCommittee, Quire, MonteCarloEER, GreedyBALD, CoreSet
-from skactiveml_dev.pool import RandomSampling as skal_RS
+try:
+    sys.path.append("../scikit-activeml-dev/")
+    try:
+        from skactiveml_dev.utils import MISSING_LABEL, labeled_indices, unlabeled_indices
+        from skactiveml_dev.classifier import SklearnClassifier
+        from skactiveml_dev.pool import UncertaintySampling, BatchBALD, EpistemicUncertaintySampling, QueryByCommittee, Quire, MonteCarloEER, GreedyBALD, CoreSet
+        from skactiveml_dev.pool import RandomSampling as skal_RS
+    except Exception:
+        from skactiveml.utils import MISSING_LABEL, labeled_indices, unlabeled_indices
+        from skactiveml.classifier import SklearnClassifier
+        from skactiveml.pool import UncertaintySampling, BatchBALD, EpistemicUncertaintySampling, QueryByCommittee, Quire, MonteCarloEER, GreedyBALD, CoreSet
+        from skactiveml.pool import RandomSampling as skal_RS
+except Exception:
+    pass

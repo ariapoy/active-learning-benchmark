@@ -17,7 +17,7 @@ QUERY="vr-zhan";
 for data in "clean1"; do
   echo "Start $QS with $QUERY on $data, repeated $N_EXP times with $N_JOBS process."
   for s in $(seq $SEED $N_JOBS $END); do #
-    timeout 25920 python main.py --tool $TOOL --qs_name $QS --hs_name $QUERY --gs_name $TASK --seed $s --n_jobs $N_JOBS --n_trials $N_JOBS --data_set $data;
+    timeout 25920 python legacy_main.py --tool $TOOL --qs_name $QS --hs_name $QUERY --gs_name $TASK --seed $s --n_jobs $N_JOBS --n_trials $N_JOBS --data_set $data;
   done
 done
 
@@ -31,7 +31,7 @@ for QS in "quire-zhan"; do
         echo "quire-zhan occurs errors on spambase";
     fi
     for s in $(seq $SEED $N_JOBS $END); do #
-      timeout 259200 python main.py --tool $TOOL --qs_name $QS --hs_name $QUERY --gs_name $TASK --seed $s --n_jobs $N_JOBS --n_trials $N_JOBS --data_set $data;
+      timeout 259200 python legacy_main.py --tool $TOOL --qs_name $QS --hs_name $QUERY --gs_name $TASK --seed $s --n_jobs $N_JOBS --n_trials $N_JOBS --data_set $data;
     done
   done
 done
@@ -42,7 +42,7 @@ QUERY="vr-zhan";
 for data in "spambase" "phoneme" "ringnorm" "twonorm" "phishing"; do
   echo "Start $QS with $QUERY on $data, repeated $N_EXP times with $N_JOBS process."
   for s in $(seq $SEED $N_JOBS $END); do #
-    timeout 259200 python main.py --tool $TOOL --qs_name $QS --hs_name $QUERY --gs_name $TASK --seed $s --n_jobs $N_JOBS --n_trials $N_JOBS --data_set $data;
+    timeout 259200 python legacy_main.py --tool $TOOL --qs_name $QS --hs_name $QUERY --gs_name $TASK --seed $s --n_jobs $N_JOBS --n_trials $N_JOBS --data_set $data;
   done
 done
 
@@ -56,7 +56,7 @@ QS="spal-zhan"
 for data in "checkerboard"; do
   echo "Start $QS with $QUERY on $data, repeated $N_EXP times with $N_JOBS process."
   for s in $(seq $SEED $N_JOBS $END); do #
-    timeout 25920 python main.py --tool $TOOL --qs_name $QS --hs_name $QUERY --gs_name $TASK --seed $s --n_jobs $N_JOBS --n_trials $N_JOBS --data_set $data;
+    timeout 25920 python legacy_main.py --tool $TOOL --qs_name $QS --hs_name $QUERY --gs_name $TASK --seed $s --n_jobs $N_JOBS --n_trials $N_JOBS --data_set $data;
   done
 done
 
@@ -67,7 +67,7 @@ QS="eer-zhan";
 for data in "spambase" "banana" "phoneme" "ringnorm" "twonorm" "phishing"; do
   echo "Start $QS with $QUERY on $data, repeated $N_EXP times with $N_JOBS process."
   for s in $(seq $SEED $N_JOBS $END); do #
-    timeout 259200 python main.py --tool $TOOL --qs_name $QS --hs_name $QUERY --gs_name $TASK --seed $s --n_jobs $N_JOBS --n_trials $N_JOBS --data_set $data;
+    timeout 259200 python legacy_main.py --tool $TOOL --qs_name $QS --hs_name $QUERY --gs_name $TASK --seed $s --n_jobs $N_JOBS --n_trials $N_JOBS --data_set $data;
   done
 done
 
@@ -77,7 +77,7 @@ QS="bmdr-zhan"
 for data in "spambase" "banana" "phoneme" "ringnorm" "twonorm" "phishing"; do
   echo "Start $QS with $QUERY on $data, repeated $N_EXP times with $N_JOBS process."
   for s in $(seq $SEED $N_JOBS $END); do #
-    timeout 259200 python main.py --tool $TOOL --qs_name $QS --hs_name $QUERY --gs_name $TASK --seed $s --n_jobs $N_JOBS --n_trials $N_JOBS --data_set $data;
+    timeout 259200 python legacy_main.py --tool $TOOL --qs_name $QS --hs_name $QUERY --gs_name $TASK --seed $s --n_jobs $N_JOBS --n_trials $N_JOBS --data_set $data;
   done
 done
 
@@ -87,7 +87,7 @@ QS="spal-zhan"
 for data in "spambase" "banana" "phoneme" "ringnorm" "twonorm" "phishing"; do
   echo "Start $QS with $QUERY on $data, repeated $N_EXP times with $N_JOBS process."
   for s in $(seq $SEED $N_JOBS $END); do #
-    timeout 259200 python main.py --tool $TOOL --qs_name $QS --hs_name $QUERY --gs_name $TASK --seed $s --n_jobs $N_JOBS --n_trials $N_JOBS --data_set $data;
+    timeout 259200 python legacy_main.py --tool $TOOL --qs_name $QS --hs_name $QUERY --gs_name $TASK --seed $s --n_jobs $N_JOBS --n_trials $N_JOBS --data_set $data;
   done
 done
 
@@ -100,6 +100,6 @@ QUERY="bso-zhan";
 for data in "spambase" "banana" "phoneme" "ringnorm" "twonorm" "phishing"; do
   echo "Start $QS with $QUERY on $data, repeated $N_EXP times with $N_JOBS process."
   for s in $(seq $SEED $N_JOBS $END); do #
-    timeout 259200 python main.py --tool $TOOL --qs_name $QS --lookDtst $BSOCONF --hs_name $QUERY --gs_name $TASK --seed $s --n_jobs $N_JOBS --n_trials $N_JOBS --data_set $data;
+    timeout 259200 python legacy_main.py --tool $TOOL --qs_name $QS --lookDtst $BSOCONF --hs_name $QUERY --gs_name $TASK --seed $s --n_jobs $N_JOBS --n_trials $N_JOBS --data_set $data;
   done
 done

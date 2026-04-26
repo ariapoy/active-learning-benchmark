@@ -1,0 +1,14 @@
+{
+  "dataset": "libsvm:/private/tmp/alb-smoke.libsvm",
+  "strategy": "entropy",
+  "strategy_category": "Model uncertainty",
+  "strategy_framework": "sklearn-native",
+  "model": "LR",
+  "seed": 0,
+  "n_trials": 1,
+  "test_size": 0.25,
+  "init_labels": 6,
+  "budget": 3,
+  "batch_size": 1,
+  "scale": false
+}
