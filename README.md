@@ -1,3 +1,5 @@
+
+
 # Pool-Based Active Learning Benchmark
 
 This is an implementation of our paper: "[An Expanded Benchmark that Rediscovers and Affirms the Edge of Uncertainty Sampling for Active Learning in Tabular Datasets](https://arxiv.org/abs/2306.08954)", which is updated from "Re-benchmarking Pool-Based Active Learning for Binary Classification".
@@ -159,7 +161,6 @@ This is an example of running compatible uncertainty sampling (US-C) on *Haberma
 ```shell
 cd src;
 bash run-reproduce-google.sh  # run all google datasets
-bash run-reproduce-libact.sh  # run all libact datasets
 bash run-reproduce-libact.sh  # run all libact datasets
 bash run-reproduce-bso.sh  # run all bso datasets
 bash run-reproduce-infeasible.sh  # run all infeasible time datasets, only for time test
